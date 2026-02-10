@@ -157,19 +157,43 @@ Topic-based discussions:
 git clone https://github.com/yourusername/content-platform.git
 cd content-platform
 
-# Run automated setup
+# Copy env and set DATABASE_URL (see .env.example)
+cp .env.example .env
+
+# Install dependencies (from repo root)
+npm install
+
+# Start Postgres and Redis (Docker)
+docker compose up -d
+
+# Generate Prisma client, push schema, seed DB
+npm run db:generate --workspace=@content-platform/database
+npm run db:push --workspace=@content-platform/database
+npm run db:seed --workspace=@content-platform/database
+
+# Start development (web app; tRPC runs inside Next.js)
+npm run dev:web
+```
+
+Or run the automated setup script (after installing Node and Docker):
+
+```bash
 chmod +x setup.sh
 ./setup.sh
+npm run dev:web
+```
 
-# Start development
-npm run dev
+If workspace dependencies are not installed from the root, install and run from the web app directory:
+
+```bash
+cd apps/web && npm install && npm run dev
 ```
 
 ### Access Points
 - Web App: http://localhost:3000
-- Admin Panel: http://localhost:3001
-- API: http://localhost:4000
-- Docs: http://localhost:4000/docs
+- TechVault: http://localhost:3000/tech-vault
+- Sign in: http://localhost:3000/api/auth/signin
+- Optional standalone API: `npm run dev:api` → http://localhost:4000
 
 ## 🛠️ Development
 
