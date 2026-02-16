@@ -150,50 +150,104 @@ Topic-based discussions:
 - Premium content
 - Affiliate commissions
 
-## 🚀 Quick Start
+## How to run it
+
+**Prerequisites**
+
+- **Node.js 18 or newer** – Required. Check with `node -v`. If you see Turbo errors like `SyntaxError: Unexpected token .`, upgrade Node (e.g. [nvm](https://github.com/nvm-sh/nvm): `nvm install 18` then `nvm use 18`).
+- **Postgres** – Either **Docker** (e.g. [Docker Desktop](https://www.docker.com/products/docker-desktop/)) so you can run `docker compose up -d`, or install Postgres locally (e.g. [Postgres.app](https://postgresapp.com/) on Mac), or use a free hosted DB (e.g. [Neon](https://neon.tech)) and put its URL in `DATABASE_URL`.
+
+You don’t need a cloud database for local development if you use Docker or a local Postgres install. For production (e.g. when you deploy and use a Squarespace domain), use a managed database from Google Cloud, AWS, or another provider.
+
+### 1. Env
 
 ```bash
-# Clone repository
-git clone https://github.com/yourusername/content-platform.git
-cd content-platform
-
-# Copy env and set DATABASE_URL (see .env.example)
 cp .env.example .env
+```
 
-# Install dependencies (from repo root)
-npm install
+Edit `.env` and set at least:
 
-# Start Postgres and Redis (Docker)
+- **DATABASE_URL** – For local Docker use:  
+  `postgresql://admin:devpassword@localhost:5432/content_platform`
+- **NEXTAUTH_SECRET** – Required for auth. Generate one:
+  ```bash
+  ./scripts/generate-secrets.sh
+  ```
+  Copy the `NEXTAUTH_SECRET` line into `.env`.
+
+Optional for Google sign-in:
+
+- **GOOGLE_CLIENT_ID** / **GOOGLE_CLIENT_SECRET** – From [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials → Create OAuth 2.0 Client ID (Web application). Set authorized redirect URI to `http://localhost:3000/api/auth/callback/google`.
+
+### 2. Database (local)
+
+**Option A – Docker (recommended)**  
+Install [Docker Desktop](https://www.docker.com/products/docker-desktop/), then:
+
+```bash
 docker compose up -d
+```
 
-# Generate Prisma client, push schema, seed DB
+**Option B – No Docker**  
+Install [Postgres](https://www.postgresql.org/download/) (or use [Postgres.app](https://postgresapp.com/) on Mac). Create a database named `content_platform` and set `DATABASE_URL` in `.env` to your connection string (e.g. `postgresql://localhost:5432/content_platform` with your username).  
+Or use a free hosted Postgres (e.g. [Neon](https://neon.tech)) and paste the connection string into `DATABASE_URL`.
+
+**Then** from the repo root:
+
+```bash
 npm run db:generate --workspace=@content-platform/database
 npm run db:push --workspace=@content-platform/database
 npm run db:seed --workspace=@content-platform/database
-
-# Start development (web app; tRPC runs inside Next.js)
-npm run dev:web
 ```
 
-Or run the automated setup script (after installing Node and Docker):
+That creates the DB, applies the schema, and seeds a demo user. No separate database install or cloud account is required for local run.
+
+### 3. Install and run the app
+
+From the repo root:
 
 ```bash
-chmod +x setup.sh
-./setup.sh
+npm install
 npm run dev:web
 ```
 
-If workspace dependencies are not installed from the root, install and run from the web app directory:
+If `npm run dev:web` fails (e.g. “workspace not found” or Turbo errors), run the web app directly:
 
 ```bash
 cd apps/web && npm install && npm run dev
 ```
 
-### Access Points
-- Web App: http://localhost:3000
-- TechVault: http://localhost:3000/tech-vault
-- Sign in: http://localhost:3000/api/auth/signin
-- Optional standalone API: `npm run dev:api` → http://localhost:4000
+To run db commands without the root workspace: `cd packages/database && npm install && npm run db:generate && npm run db:push && npm run db:seed`
+
+### 4. Use the app
+
+- Open **http://localhost:3000**
+- Go to **TechVault** → sign in (e.g. Google) → **New review** to create a review.
+
+The standalone API (`npm run dev:api`) is optional; the web app uses the tRPC route inside Next.js, so only the web app and DB need to be running.
+
+### Access points (local)
+
+| What        | URL |
+|------------|-----|
+| Web app    | http://localhost:3000 |
+| TechVault  | http://localhost:3000/tech-vault |
+| Sign in    | http://localhost:3000/api/auth/signin |
+| Standalone API (optional) | http://localhost:4000 (run `npm run dev:api`) |
+
+---
+
+### Production / deployment (e.g. Squarespace domain)
+
+When you deploy (e.g. Next.js on Vercel and your domain on Squarespace), **don’t use the local Docker Postgres**. Use a hosted database and point the app at it with `DATABASE_URL`.
+
+**Hosted Postgres options:**
+
+- **Google Cloud:** [Cloud SQL for PostgreSQL](https://cloud.google.com/sql/postgresql) – create an instance, then use the connection name or public IP in `DATABASE_URL`.
+- **AWS:** [RDS for PostgreSQL](https://aws.amazon.com/rds/postgresql/) – create a DB instance, then set `DATABASE_URL` to the provided endpoint.
+- **Other options:** [Neon](https://neon.tech), [Supabase](https://supabase.com), [Vercel Postgres](https://vercel.com/storage/postgres) – all work with Prisma; use the connection string they give you as `DATABASE_URL`.
+
+In production, set `NEXTAUTH_URL` to your real URL (e.g. `https://www.yourdomain.com`) and use strong, unique values for `NEXTAUTH_SECRET` and `JWT_SECRET`.
 
 ## 🛠️ Development
 
@@ -201,13 +255,14 @@ cd apps/web && npm install && npm run dev
 # Install dependencies
 npm install
 
-# Database setup
-npm run db:migrate
-npm run db:seed
+# Database (after docker compose up -d)
+npm run db:generate --workspace=@content-platform/database
+npm run db:push --workspace=@content-platform/database   # or db:migrate for production
+npm run db:seed --workspace=@content-platform/database
 
 # Development
-npm run dev              # All services
-npm run dev:web          # Web only
+npm run dev              # All services (web + API)
+npm run dev:web          # Web only (tRPC inside Next.js)
 
 # Testing
 npm test                 # Unit tests
