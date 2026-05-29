@@ -1,0 +1,32 @@
+{
+  "name": "content-platform",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:web": "npm run dev --workspace=@content-platform/web",
+    "dev:api": "npm run dev --workspace=@content-platform/api",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean 2>/dev/null; rm -rf node_modules",
+    "db:generate": "npm run db:generate --workspace=@content-platform/database",
+    "db:migrate": "npm run db:migrate --workspace=@content-platform/database",
+    "db:push": "npm run db:push --workspace=@content-platform/database",
+    "db:seed": "npm run db:seed --workspace=@content-platform/database",
+    "db:studio": "npm run db:studio --workspace=@content-platform/database"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0"
+  },
+  "packageManager": "npm@10.2.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@prisma/client": "^7.4.0"
+  }
+}
