@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -8,7 +8,7 @@ import { compare } from "bcryptjs";
 // Simple in-memory store for demo; replace with DB-backed verification in production
 const pendingVerification: Record<string, string> = {};
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" as const, maxAge: 30 * 24 * 60 * 60 },
   pages: { signIn: "/auth/signin" },
@@ -43,11 +43,21 @@ export const authOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.id = user.id;
+      if (user) {
+        token.id = user.id;
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { role: true },
+        });
+        token.role = dbUser?.role ?? "USER";
+      }
       return token;
     },
     async session({ session, token }) {
-      if (session.user) (session.user as { id: string }).id = token.id as string;
+      if (session.user) {
+        (session.user as { id: string }).id = token.id as string;
+        (session.user as { role: string }).role = token.role as string;
+      }
       return session;
     },
   },

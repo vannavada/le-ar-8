@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { router, publicProcedure, protectedProcedure } from "../trpc";
+import { router, publicProcedure, adminProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { createTechVaultRepository } from "../repositories/tech-vault.repository";
-import { TechVaultCategory } from "@prisma/client";
+import { createTechVaultRepository } from "@/repositories/tech-vault.repository";
+import { TechVaultCategory } from "@content-platform/database";
 
 const categoryEnum = z.nativeEnum(TechVaultCategory);
 
@@ -32,13 +32,13 @@ export const techVaultRouter = router({
     const repo = createTechVaultRepository(ctx.prisma);
     const review = await repo.getBySlug(input.slug);
     if (!review) throw new TRPCError({ code: "NOT_FOUND", message: "Review not found" });
-    if (!review.published && review.authorId !== ctx.userId) {
+    if (!review.published && ctx.role !== "ADMIN") {
       throw new TRPCError({ code: "NOT_FOUND", message: "Review not found" });
     }
     return review;
   }),
 
-  create: protectedProcedure
+  create: adminProcedure
     .input(
       z.object({
         title: z.string().min(1).max(200),
@@ -56,12 +56,12 @@ export const techVaultRouter = router({
       const repo = createTechVaultRepository(ctx.prisma);
       return repo.create({
         ...input,
-        authorId: ctx.userId,
+        authorId: ctx.userId!,
         published: input.published ?? false,
       });
     }),
 
-  update: protectedProcedure
+  update: adminProcedure
     .input(
       z.object({
         id: z.string().cuid(),
@@ -79,15 +79,12 @@ export const techVaultRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
       const repo = createTechVaultRepository(ctx.prisma);
-      const updated = await repo.update(id, ctx.userId, data);
-      if (!updated) throw new TRPCError({ code: "NOT_FOUND", message: "Review not found or access denied" });
-      return updated;
+      return repo.update(id, data);
     }),
 
-  delete: protectedProcedure.input(z.object({ id: z.string().cuid() })).mutation(async ({ ctx, input }) => {
+  delete: adminProcedure.input(z.object({ id: z.string().cuid() })).mutation(async ({ ctx, input }) => {
     const repo = createTechVaultRepository(ctx.prisma);
-    const result = await repo.delete(input.id, ctx.userId);
-    if (result.count === 0) throw new TRPCError({ code: "NOT_FOUND", message: "Review not found or access denied" });
+    await repo.delete(input.id);
     return { success: true };
   }),
 });

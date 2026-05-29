@@ -1,5 +1,5 @@
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
-import type { AppRouter } from "@content-platform/api/router";
+import type { AppRouter } from "@/server/_app";
 import superjson from "superjson";
 
 const getBaseUrl = () => {

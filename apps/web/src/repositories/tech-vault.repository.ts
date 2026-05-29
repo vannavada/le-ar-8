@@ -1,5 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
-import type { TechVaultCategory } from "@prisma/client";
+import type { PrismaClient, TechVaultCategory } from "@content-platform/database";
 
 export type CreateReviewInput = {
   title: string;
@@ -14,7 +13,17 @@ export type CreateReviewInput = {
   authorId: string;
 };
 
-export type UpdateReviewInput = Partial<Omit<CreateReviewInput, "authorId">>;
+export type UpdateReviewInput = {
+  title?: string;
+  slug?: string;
+  summary?: string;
+  body?: string;
+  rating?: number;
+  productName?: string;
+  category?: TechVaultCategory;
+  imageUrl?: string | null;
+  published?: boolean;
+};
 
 export function createTechVaultRepository(db: PrismaClient) {
   return {
@@ -38,13 +47,6 @@ export function createTechVaultRepository(db: PrismaClient) {
       });
     },
 
-    getById(id: string) {
-      return db.techVaultReview.findUnique({
-        where: { id },
-        include: { author: { select: { id: true, name: true, image: true } } },
-      });
-    },
-
     create(data: CreateReviewInput) {
       return db.techVaultReview.create({
         data: {
@@ -55,22 +57,20 @@ export function createTechVaultRepository(db: PrismaClient) {
       });
     },
 
-    update(id: string, authorId: string, data: UpdateReviewInput) {
-      return db.techVaultReview.updateMany({
-        where: { id, authorId },
+    update(id: string, data: UpdateReviewInput) {
+      return db.techVaultReview.update({
+        where: { id },
         data: {
           ...data,
           ...(data.published === true && { publishedAt: new Date() }),
         },
-      }).then(() => db.techVaultReview.findUnique({
-        where: { id },
         include: { author: { select: { id: true, name: true, image: true } } },
-      }));
+      });
     },
 
-    delete(id: string, authorId: string) {
-      return db.techVaultReview.deleteMany({
-        where: { id, authorId },
+    delete(id: string) {
+      return db.techVaultReview.delete({
+        where: { id },
       });
     },
   };

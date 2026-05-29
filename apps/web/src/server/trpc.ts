@@ -9,13 +9,11 @@ const t = initTRPC.context<Context>().create({
 export const router = t.router;
 export const publicProcedure = t.procedure;
 
-const requireAuth = t.middleware(({ ctx, next }) => {
-  if (!ctx.userId) {
-    throw new TRPCError({ code: "UNAUTHORIZED", message: "Not authenticated" });
+const requireAdmin = t.middleware(({ ctx, next }) => {
+  if (ctx.role !== "ADMIN") {
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "Admin access required" });
   }
-  return next({
-    ctx: { ...ctx, userId: ctx.userId as string },
-  });
+  return next({ ctx: { ...ctx, role: "ADMIN" as const } });
 });
 
-export const protectedProcedure = t.procedure.use(requireAuth);
+export const adminProcedure = t.procedure.use(requireAdmin);

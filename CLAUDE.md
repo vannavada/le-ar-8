@@ -55,7 +55,16 @@ embedded seamlessly into content.
 9. **Analytics = PostHog** (free tier). One script tag. Track page views,
    affiliate-link clicks, nestmargin CTA clicks, calculator usage.
 10. **Interest rates are automated** via Vercel Cron + a `rates-mcp` fetcher.
-11. **Deployment: Vercel** (web) + **Neon** (Postgres) + **Vercel Cron** (jobs).
+11. **Deployment: Vercel** (web) + **Vercel Cron** (jobs). **Database: Neon
+    free tier for now.** Rationale: Render's free Postgres expires after 30 days
+    and is limited to one free DB per account (nestmargin holds that slot), so
+    Neon's permanently-free tier is the zero-cost choice for lear8 while it's
+    built in public. The DB is plain Postgres behind Prisma 7's
+    `@prisma/adapter-pg` adapter, so it's portable: **planned move to Render
+    later** (once nestmargin is on paid Render) via `pg_dump`/`pg_restore` +
+    swapping `DATABASE_URL`. Never hardcode `DATABASE_URL` — always env var, so
+    the future move is a one-variable change. lear8 and nestmargin databases
+    stay separate instances regardless of provider (isolation; playbook rule).
 12. **Prisma 7** (Rust-free TypeScript client). Use the `prisma-client`
     provider (not `prisma-client-js`), ESM, with the `@prisma/adapter-pg`
     driver adapter. Generated client outputs to a path in source, not
