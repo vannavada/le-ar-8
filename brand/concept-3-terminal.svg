@@ -1,0 +1,32 @@
+<svg width="640" height="320" viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="le-ar-8 terminal logo">
+  <!-- Concept 3: The Terminal Dot — le-ar-8
+       Mark: a code-bracket terminal prompt [ /8 ] evoking layer-8 / the command line.
+       Wordmark: le-ar-8.com in a monospace face.
+       Palette: Charcoal #1A1A1A, Neon Teal #00D9CC, Slate Gray #708090, Terminal White #FFFFFF.
+       Swap fill to #FFFFFF (mark) for dark backgrounds. -->
+  <rect width="640" height="320" fill="none"/>
+
+  <!-- MARK: [ /8 ] -->
+  <g font-family="'Space Mono','Roboto Mono',ui-monospace,monospace" font-weight="700" font-size="150" letter-spacing="2">
+    <!-- left bracket -->
+    <text x="150" y="170" text-anchor="middle" fill="#1A1A1A">[</text>
+    <!-- code slash, accented -->
+    <text x="285" y="170" text-anchor="middle" fill="#00D9CC">/</text>
+    <!-- the 8 (the human layer) -->
+    <text x="400" y="170" text-anchor="middle" fill="#1A1A1A">8</text>
+    <!-- right bracket -->
+    <text x="510" y="170" text-anchor="middle" fill="#1A1A1A">]</text>
+  </g>
+
+  <!-- blinking-cursor block, a terminal signature -->
+  <rect x="540" y="78" width="22" height="92" fill="#00D9CC"/>
+
+  <!-- WORDMARK -->
+  <text x="320" y="262" text-anchor="middle"
+        font-family="'Space Mono','Roboto Mono',ui-monospace,monospace"
+        font-weight="700" font-size="62" letter-spacing="2" fill="#1A1A1A">le-ar-8</text>
+  <!-- tld, muted -->
+  <text x="320" y="298" text-anchor="middle"
+        font-family="'Space Mono','Roboto Mono',ui-monospace,monospace"
+        font-weight="400" font-size="22" letter-spacing="3" fill="#708090">.com</text>
+</svg>
