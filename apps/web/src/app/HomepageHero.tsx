@@ -70,7 +70,7 @@ function rgba(hex: string, alpha: number): string {
   return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
 }
 
-// [/8] terminal submit affordance — teal slash, foreground brackets
+// [/8] terminal submit affordance inside the field
 function TerminalSubmit() {
   return (
     <span className="font-mono font-bold text-sm leading-none select-none tracking-tight">
@@ -109,28 +109,25 @@ export function HomepageHero({ randomHref }: Props) {
   }
 
   return (
-    <section className="relative flex items-center justify-center min-h-[82vh] px-6 sm:px-10 overflow-hidden">
+    // Flex column: watermark sits above the content group; both centered together.
+    <section className="relative flex flex-col items-center justify-center min-h-[82vh] px-6 sm:px-10 overflow-hidden">
 
-      {/* ── Watermark — [/8] as atmospheric background texture ─────────────
-          Strictly behind content (no z-index), pointer-events-none.
-          Single faint foreground color — no teal accent in the watermark.
-          opacity-[0.05] light / opacity-[0.08] dark: just barely perceptible.  */}
-      <div
-        className="pointer-events-none absolute inset-0 flex items-center justify-center select-none"
-        aria-hidden="true"
-      >
+      {/* ── Watermark — centered above content, faint atmospheric element ──────
+          In normal flex flow (not absolute) so it stays above the content group
+          at all widths including mobile. pointer-events-none keeps it inert.  */}
+      <div className="pointer-events-none select-none flex justify-center w-full" aria-hidden="true">
         <span
-          className="font-mono font-bold text-foreground opacity-[0.04] dark:opacity-[0.06]"
-          style={{ fontSize: "clamp(14rem, 28vw, 38rem)", lineHeight: 1, letterSpacing: "-0.02em" }}
+          className="font-mono font-bold text-foreground opacity-[0.05] dark:opacity-[0.07] blur-[2px]"
+          style={{ fontSize: "clamp(8rem, 22vw, 26rem)", lineHeight: 1, letterSpacing: "-0.02em" }}
         >
           [/8]
         </span>
       </div>
 
-      {/* ── Content — centered column, above watermark ───────────────────── */}
-      <div className="relative z-10 w-full max-w-5xl animate-fade-in flex flex-col items-center">
+      {/* ── Content — centered below watermark ────────────────────────────── */}
+      <div className="relative z-10 w-full max-w-2xl animate-fade-in flex flex-col items-center mt-6 sm:mt-8">
 
-        {/* Headline — centered, single line on desktop */}
+        {/* Headline */}
         <h1
           className="w-full text-center font-serif font-normal text-foreground tracking-tight"
           style={{ fontSize: "clamp(2.75rem, 4.5vw + 1.4rem, 5rem)", lineHeight: 1.06 }}
@@ -138,7 +135,7 @@ export function HomepageHero({ randomHref }: Props) {
           What are you in the mood for?
         </h1>
 
-        {/* Intent field — solid bg over watermark, [/8] submit on right */}
+        {/* Field + secondary actions */}
         <div className="mt-8 w-full">
           <div className="relative">
             <input
@@ -149,7 +146,7 @@ export function HomepageHero({ randomHref }: Props) {
               placeholder="Try 'mortgages for NRIs' or 'best mechanical keyboard'…"
               className={cn(
                 "w-full rounded-xl border border-border",
-                "bg-background dark:bg-card",   // always solid — content readable over watermark
+                "bg-background dark:bg-card",
                 "px-6 py-5 pr-16 text-lg text-foreground",
                 "placeholder:text-muted-foreground/50",
                 "transition-[border-color] duration-200 ease-in-out",
@@ -165,29 +162,35 @@ export function HomepageHero({ randomHref }: Props) {
             </button>
           </div>
 
-          {/* "or cast me adrift" — centered below field as alternative action */}
+          {/* "Cast me adrift" — proper teal-accented button, secondary to the field.
+              Prominent enough to register as a real action; quieter than the field. */}
           {randomHref !== null && (
-            <p className="mt-2 text-sm text-muted-foreground text-center">
-              or{" "}
+            <div className="mt-4 flex justify-center">
               <button
                 onClick={() => router.push(randomHref!)}
-                className="underline underline-offset-2 decoration-muted-foreground/40 hover:text-foreground hover:decoration-foreground transition-colors duration-150"
+                className={cn(
+                  "rounded-lg border border-primary/30 bg-primary/10",
+                  "px-5 py-2.5 text-sm font-semibold text-primary",
+                  "transition-colors duration-150",
+                  "hover:bg-primary/20 hover:border-primary/50",
+                  "focus:outline-none focus:ring-2 focus:ring-primary/20",
+                )}
               >
-                cast me adrift
+                Cast me adrift
               </button>
-            </p>
+            </div>
           )}
         </div>
 
-        {/* No-match inline hint — centered */}
+        {/* No-match hint */}
         {noMatch && (
           <p className="mt-3 text-sm text-muted-foreground text-center animate-fade-in">
             Nothing obvious — try a hub below, or rephrase with simpler words.
           </p>
         )}
 
-        {/* Hub chips — centered row; solid bg ensures legibility over watermark */}
-        <div className="mt-6 flex flex-wrap lg:flex-nowrap gap-2 justify-center">
+        {/* Hub chips — flex-wrap (not nowrap) since max-w-2xl is narrower) */}
+        <div className="mt-6 flex flex-wrap gap-2 justify-center">
           {SECTIONS.map((s) => (
             <button
               key={s.slug}
@@ -198,7 +201,7 @@ export function HomepageHero({ randomHref }: Props) {
                 e.currentTarget.style.backgroundColor = rgba(s.color, 0.1);
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = ""; // restore CSS class bg
+                e.currentTarget.style.backgroundColor = "";
               }}
             >
               {s.name}
