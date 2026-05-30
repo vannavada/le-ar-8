@@ -135,7 +135,7 @@ export function HomepageHero({ randomHref }: Props) {
           What are you in the mood for?
         </h1>
 
-        {/* Field + secondary actions */}
+        {/* Intent field */}
         <div className="mt-8 w-full">
           <div className="relative">
             <input
@@ -161,25 +161,45 @@ export function HomepageHero({ randomHref }: Props) {
               <TerminalSubmit />
             </button>
           </div>
-
-          {/* "Cast me adrift" — refined ghost action, secondary to the field */}
-          {randomHref !== null && (
-            <div className="mt-4 flex justify-center">
-              <button
-                onClick={() => router.push(randomHref!)}
-                className={cn(
-                  "rounded-md border border-primary/40 bg-transparent",
-                  "px-4 py-1.5 text-sm font-normal text-primary/80",
-                  "transition-colors duration-150",
-                  "hover:border-primary/70 hover:text-primary hover:bg-primary/5",
-                  "focus:outline-none",
-                )}
-              >
-                Cast me adrift
-              </button>
-            </div>
-          )}
         </div>
+
+        {/* "Cast me adrift" — typographic invitation, NOT a chip or button shape.
+            Italic Instrument Serif phrase with wave icon; lives between the field
+            and the hub chips as the "or let me choose for you" sibling of search. */}
+        {randomHref !== null && (
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={() => router.push(randomHref!)}
+              className="group flex items-center gap-2.5 focus:outline-none"
+            >
+              {/* Wave icon — drifts upward gently on hover */}
+              <svg
+                viewBox="0 0 20 10"
+                width="20"
+                height="10"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                className="text-primary flex-shrink-0 transition-transform duration-700 group-hover:-translate-y-1.5"
+                aria-hidden="true"
+              >
+                <path d="M1 5 c3-5 7-5 9 0 c3 5 7 5 9 0" />
+              </svg>
+              {/* Copy: quiet Inter lead-in + italic serif phrase + arrow */}
+              <span className="flex items-baseline gap-1.5">
+                <span className="text-xs text-muted-foreground font-normal">Not sure?</span>
+                <span
+                  className="font-serif italic text-primary"
+                  style={{ fontSize: "1.05rem", lineHeight: 1 }}
+                >
+                  Cast me adrift
+                </span>
+                <span className="text-primary text-xs">→</span>
+              </span>
+            </button>
+          </div>
+        )}
 
         {/* No-match hint */}
         {noMatch && (
@@ -189,7 +209,7 @@ export function HomepageHero({ randomHref }: Props) {
         )}
 
         {/* Hub chips — single row at sm+, wraps on mobile */}
-        <div className="mt-6 flex flex-wrap sm:flex-nowrap gap-1.5 justify-center">
+        <div className="mt-7 flex flex-wrap sm:flex-nowrap gap-1.5 justify-center">
           {SECTIONS.map((s) => (
             <button
               key={s.slug}
