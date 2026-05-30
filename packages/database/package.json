@@ -8,6 +8,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
+    "build": "prisma generate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.0",
+    "@prisma/client": "^7.4.0",
     "pg": "^8.12.0"
   },
   "devDependencies": {
