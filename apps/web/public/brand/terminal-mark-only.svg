@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 55 455 140" role="img" aria-label="[/8] mark">
+  <!--
+    le-ar-8 terminal mark — [/8] glyph only, no wordmark.
+    Charcoal elements ([, 8, ]) use currentColor so they adapt to dark mode
+    when the SVG is inlined (light: near-charcoal; dark: near-white).
+    Teal slash (#00D9CC) is always teal — it is the brand accent.
+    To embed: inline this SVG and set color via CSS (e.g. class="text-foreground").
+  -->
+  <g font-family="'Space Mono','Roboto Mono',ui-monospace,monospace"
+     font-weight="700" font-size="150" letter-spacing="2">
+    <text x="150" y="170" text-anchor="middle" fill="currentColor">[</text>
+    <text x="285" y="170" text-anchor="middle" fill="#00D9CC">/</text>
+    <text x="400" y="170" text-anchor="middle" fill="currentColor">8</text>
+    <text x="510" y="170" text-anchor="middle" fill="currentColor">]</text>
+  </g>
+</svg>

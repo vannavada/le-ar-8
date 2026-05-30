@@ -8,14 +8,31 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { UserMenu } from "@/components/auth/user-menu";
 import { cn } from "@/lib/utils";
 
-/** [/8] terminal mark — charcoal parts via currentColor, teal slash stays teal */
+/**
+ * [/8] terminal mark — inlined from public/brand/terminal-mark-only.svg.
+ * Charcoal elements ([, 8, ]) use currentColor → adapt via text-foreground.
+ * Teal slash (#00D9CC) is hardcoded as the permanent brand accent.
+ */
 function TerminalMark({ className }: { className?: string }) {
   return (
-    <span className={cn("font-mono font-bold leading-none select-none", className)}>
-      <span className="text-foreground">[</span>
-      <span style={{ color: "#00D9CC" }}>/</span>
-      <span className="text-foreground">8]</span>
-    </span>
+    <svg
+      viewBox="100 55 455 140"
+      className={cn("h-[1.1em] w-auto flex-shrink-0 select-none", className)}
+      aria-label="[/8] mark"
+      role="img"
+    >
+      <g
+        fontFamily="'Space Mono','Roboto Mono',ui-monospace,monospace"
+        fontWeight="700"
+        fontSize="150"
+        letterSpacing="2"
+      >
+        <text x="150" y="170" textAnchor="middle" fill="currentColor">[</text>
+        <text x="285" y="170" textAnchor="middle" fill="#00D9CC">/</text>
+        <text x="400" y="170" textAnchor="middle" fill="currentColor">8</text>
+        <text x="510" y="170" textAnchor="middle" fill="currentColor">]</text>
+      </g>
+    </svg>
   );
 }
 
@@ -29,7 +46,7 @@ export function Header() {
 
         {/* Brand: [/8] mark + le-ar-8 wordmark */}
         <Link href="/" className="flex items-center gap-2 group">
-          <TerminalMark className="text-sm" />
+          <TerminalMark className="text-foreground" />
           <span className="text-base font-bold tracking-tight text-foreground">
             le-ar-8
           </span>
