@@ -4,30 +4,34 @@
 
 @layer base {
   :root {
+    /* Brand palette: Charcoal foundation, Neon Teal accent */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 0 0% 10%;           /* near-charcoal #1A1A1A */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --border: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --card-foreground: 0 0% 10%;
+    --primary: 177 100% 43%;          /* Neon Teal #00D9CC */
+    --primary-foreground: 0 0% 100%;  /* white on teal */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 46%;
+    --border: 0 0% 88%;
+    --ring: 177 100% 43%;
     --radius: 0.5rem;
+    /* Magenta: affiliate/CTA only — never decorative */
+    --affiliate: 336 79% 47%;         /* #D81B60 */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 47.4% 11.2%;
-    --card-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --border: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --background: 0 0% 8%;            /* deep near-black */
+    --foreground: 0 0% 95%;           /* near-white */
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+    --primary: 177 100% 48%;          /* teal, slightly brighter on dark */
+    --primary-foreground: 0 0% 8%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 60%;
+    --border: 0 0% 20%;
+    --ring: 177 100% 48%;
+    --affiliate: 336 79% 55%;
   }
 }
 

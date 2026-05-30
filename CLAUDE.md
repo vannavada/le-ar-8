@@ -79,6 +79,25 @@ embedded seamlessly into content.
     node_modules. Min Node 20.19+ / TypeScript 5.4+. Do not downgrade.
 13. **User.role defaults to USER**, never EDITOR or ADMIN. Authors are promoted
     manually (USER → EDITOR or ADMIN) until an invite/management UI exists.
+14. **Brand palette (locked hierarchy).** Charcoal `#1A1A1A` = foundation
+    (text, dark surfaces, logo marks' primary). Neon Teal `#00D9CC` = THE single
+    accent, used throughout (links, field focus, interactive states, the
+    terminal `/8` submit affordance). Magenta `#D81B60` = a rare deliberate
+    splash with ONE defined role: **affiliate / CTA color** (every affiliate
+    link and the nestmargin CTA renders magenta). Discipline: teal is the
+    everywhere-accent; magenta is sparing and reserved for CTAs only — never a
+    second co-equal accent. This replaces the per-section accent colors as the
+    *brand* palette; per-section colors still differentiate hubs but sit within
+    this charcoal/teal foundation. Two logo marks share this palette. **Terminal
+    `[/8]` (Concept 3) is the primary/chrome mark:** sitewide header (beside the
+    "le-ar-8" wordmark, top left), a big FAINT `[/8]` watermark behind the
+    homepage (must read as texture, not a third logo — very low opacity,
+    theme-aware), the search-field submit affordance, and the technical/legal
+    hubs (TechVault, FinanceHub, legal) when built. **Figure-8 (Concept 1, Human
+    Element) is the expressive mark, reserved for the human-voice hubs**
+    (ThoughtForge, MindStream, CommunitySpace) when built in Phase 2 — it is NOT
+    on the homepage (competed with the headline). Both recolored to charcoal +
+    teal so they read as one brand. See `brand/logo-concepts.md`.
 
 ---
 

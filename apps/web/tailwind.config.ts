@@ -26,6 +26,7 @@ const config: Config = {
         },
         border: "hsl(var(--border))",
         ring: "hsl(var(--ring))",
+        affiliate: "hsl(var(--affiliate))",
         section: {
           "tech-vault": "#8b5cf6",
           "thought-forge": "#f59e0b",

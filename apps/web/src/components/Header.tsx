@@ -8,6 +8,17 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { UserMenu } from "@/components/auth/user-menu";
 import { cn } from "@/lib/utils";
 
+/** [/8] terminal mark — charcoal parts via currentColor, teal slash stays teal */
+function TerminalMark({ className }: { className?: string }) {
+  return (
+    <span className={cn("font-mono font-bold leading-none select-none", className)}>
+      <span className="text-foreground">[</span>
+      <span style={{ color: "#00D9CC" }}>/</span>
+      <span className="text-foreground">8]</span>
+    </span>
+  );
+}
+
 export function Header() {
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -15,8 +26,13 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          lear8
+
+        {/* Brand: [/8] mark + le-ar-8 wordmark */}
+        <Link href="/" className="flex items-center gap-2 group">
+          <TerminalMark className="text-sm" />
+          <span className="text-base font-bold tracking-tight text-foreground">
+            le-ar-8
+          </span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-1">

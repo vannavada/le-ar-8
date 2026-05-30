@@ -52,35 +52,38 @@ function findBestHub(query: string): string | null {
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
     .filter((w) => w.length >= 3);
-
   if (!words.length) return null;
-
   const scores: Record<string, number> = {};
   for (const [hub, keywords] of Object.entries(KEYWORD_MAP)) {
     scores[hub] = 0;
-    for (const word of words) {
-      for (const kw of keywords) {
-        if (word === kw || word.startsWith(kw) || kw.startsWith(word)) {
+    for (const word of words)
+      for (const kw of keywords)
+        if (word === kw || word.startsWith(kw) || kw.startsWith(word))
           scores[hub]++;
-        }
-      }
-    }
   }
-
   const best = Object.entries(scores).sort(([, a], [, b]) => b - a)[0];
   return best && best[1] > 0 ? best[0] : null;
 }
 
-// rgba helper for chip accent tints
 function rgba(hex: string, alpha: number): string {
   const n = parseInt(hex.slice(1), 16);
   return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
 }
 
+// [/8] terminal submit affordance — teal slash, foreground brackets
+function TerminalSubmit() {
+  return (
+    <span className="font-mono font-bold text-sm leading-none select-none tracking-tight">
+      <span className="text-foreground opacity-60">[</span>
+      <span style={{ color: "#00D9CC" }}>/</span>
+      <span className="text-foreground opacity-60">8]</span>
+    </span>
+  );
+}
+
 // ── component ──────────────────────────────────────────────────────────────
 
 interface Props {
-  /** href of a random published article, or null if no content exists yet */
   randomHref: string | null;
 }
 
@@ -95,12 +98,8 @@ export function HomepageHero({ randomHref }: Props) {
     const hub = findBestHub(q);
     if (hub) {
       const match = SECTIONS.find((s) => s.slug === hub);
-      if (match) {
-        router.push(match.href);
-        return;
-      }
+      if (match) { router.push(match.href); return; }
     }
-    // No match — show inline hint instead of scrolling to a removed section
     setNoMatch(true);
   }
 
@@ -110,100 +109,102 @@ export function HomepageHero({ randomHref }: Props) {
   }
 
   return (
-    <section className="flex items-center justify-center min-h-[82vh] px-4 sm:px-8">
-      <div className="w-full max-w-2xl animate-fade-in">
+    <section className="relative flex items-center justify-center min-h-[82vh] px-6 sm:px-10 overflow-hidden">
 
-        {/* Headline — dominant serif anchor, responsive from 4 rem → 7 rem */}
+      {/* ── Watermark — [/8] as atmospheric background texture ─────────────
+          Strictly behind content (no z-index), pointer-events-none.
+          Single faint foreground color — no teal accent in the watermark.
+          opacity-[0.05] light / opacity-[0.08] dark: just barely perceptible.  */}
+      <div
+        className="pointer-events-none absolute inset-0 flex items-center justify-center select-none"
+        aria-hidden="true"
+      >
+        <span
+          className="font-mono font-bold text-foreground opacity-[0.04] dark:opacity-[0.06]"
+          style={{ fontSize: "clamp(14rem, 28vw, 38rem)", lineHeight: 1, letterSpacing: "-0.02em" }}
+        >
+          [/8]
+        </span>
+      </div>
+
+      {/* ── Content — centered column, above watermark ───────────────────── */}
+      <div className="relative z-10 w-full max-w-5xl animate-fade-in flex flex-col items-center">
+
+        {/* Headline — centered, single line on desktop */}
         <h1
-          className="font-serif font-normal text-foreground tracking-tight"
-          style={{ fontSize: "clamp(4rem, 8vw + 0.5rem, 7rem)", lineHeight: 1.05 }}
+          className="w-full text-center font-serif font-normal text-foreground tracking-tight"
+          style={{ fontSize: "clamp(2.75rem, 4.5vw + 1.4rem, 5rem)", lineHeight: 1.06 }}
         >
           What are you in the mood for?
         </h1>
 
-        {/* Intent field — larger, with in-field submit affordance */}
-        <div className="relative mt-10">
-          <input
-            type="text"
-            value={value}
-            onChange={handleChange}
-            onKeyDown={(e) => e.key === "Enter" && submit()}
-            placeholder="Try 'mortgages for NRIs' or 'best mechanical keyboard'…"
-            className={cn(
-              "w-full rounded-xl border border-border bg-background",
-              "px-6 py-5 pr-16 text-lg text-foreground",
-              "placeholder:text-muted-foreground/50",
-              "transition-[border-color] duration-200 ease-in-out",
-              "focus:outline-none focus:border-primary",
-              "dark:bg-muted/20",
-            )}
-          />
-          {/* Submit affordance — always visible, accent-colored, clickable */}
-          <button
-            onClick={submit}
-            aria-label="Submit"
-            className={cn(
-              "absolute right-3 top-1/2 -translate-y-1/2",
-              "flex h-10 w-10 items-center justify-center rounded-lg",
-              "text-base transition-colors duration-150",
-              "text-primary hover:bg-muted focus:outline-none",
-            )}
-          >
-            {/* Enter-key return arrow */}
-            <svg
-              viewBox="0 0 20 20"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-[18px] w-[18px]"
-              aria-hidden="true"
+        {/* Intent field — solid bg over watermark, [/8] submit on right */}
+        <div className="mt-8 w-full">
+          <div className="relative">
+            <input
+              type="text"
+              value={value}
+              onChange={handleChange}
+              onKeyDown={(e) => e.key === "Enter" && submit()}
+              placeholder="Try 'mortgages for NRIs' or 'best mechanical keyboard'…"
+              className={cn(
+                "w-full rounded-xl border border-border",
+                "bg-background dark:bg-card",   // always solid — content readable over watermark
+                "px-6 py-5 pr-16 text-lg text-foreground",
+                "placeholder:text-muted-foreground/50",
+                "transition-[border-color] duration-200 ease-in-out",
+                "focus:outline-none focus:border-primary",
+              )}
+            />
+            <button
+              onClick={submit}
+              aria-label="Submit"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-lg transition-colors duration-150 hover:bg-muted focus:outline-none"
             >
-              <path d="M17 5v6a2 2 0 0 1-2 2H4" />
-              <path d="M7 16l-4-4 4-4" />
-            </svg>
-          </button>
+              <TerminalSubmit />
+            </button>
+          </div>
+
+          {/* "or cast me adrift" — centered below field as alternative action */}
+          {randomHref !== null && (
+            <p className="mt-2 text-sm text-muted-foreground text-center">
+              or{" "}
+              <button
+                onClick={() => router.push(randomHref!)}
+                className="underline underline-offset-2 decoration-muted-foreground/40 hover:text-foreground hover:decoration-foreground transition-colors duration-150"
+              >
+                cast me adrift
+              </button>
+            </p>
+          )}
         </div>
 
-        {/* No-match inline hint */}
+        {/* No-match inline hint — centered */}
         {noMatch && (
-          <p className="mt-3 text-sm text-muted-foreground animate-fade-in">
-            Nothing obvious — try a hub chip below, or rephrase with simpler words.
+          <p className="mt-3 text-sm text-muted-foreground text-center animate-fade-in">
+            Nothing obvious — try a hub below, or rephrase with simpler words.
           </p>
         )}
 
-        {/* Hub chips */}
-        <div className="mt-6 flex flex-wrap gap-2">
+        {/* Hub chips — centered row; solid bg ensures legibility over watermark */}
+        <div className="mt-6 flex flex-wrap lg:flex-nowrap gap-2 justify-center">
           {SECTIONS.map((s) => (
             <button
               key={s.slug}
               onClick={() => router.push(s.href)}
-              className="rounded-full border px-3.5 py-1.5 text-sm font-medium transition-transform duration-150 hover:scale-[1.03]"
+              className="whitespace-nowrap rounded-full border bg-background dark:bg-card px-3 py-1.5 text-sm font-medium transition-transform duration-150 hover:scale-[1.03]"
               style={{ color: s.color, borderColor: rgba(s.color, 0.3) }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = rgba(s.color, 0.08);
+                e.currentTarget.style.backgroundColor = rgba(s.color, 0.1);
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.backgroundColor = ""; // restore CSS class bg
               }}
             >
               {s.name}
             </button>
           ))}
         </div>
-
-        {/* "Cast me adrift" — hidden when no published content exists */}
-        {randomHref !== null && (
-          <div className="mt-5">
-            <button
-              onClick={() => router.push(randomHref!)}
-              className="text-sm text-muted-foreground transition-colors duration-150 hover:text-foreground"
-            >
-              Cast me adrift
-            </button>
-          </div>
-        )}
       </div>
     </section>
   );
