@@ -190,7 +190,7 @@ export function HomepageHero({ randomHref }: Props) {
               <span className="flex items-baseline gap-1.5">
                 <span className="text-xs text-muted-foreground font-normal">Not sure?</span>
                 <span
-                  className="font-serif italic text-primary"
+                  className="font-serif text-primary"
                   style={{ fontSize: "1.05rem", lineHeight: 1 }}
                 >
                   Cast me adrift
