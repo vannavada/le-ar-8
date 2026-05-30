@@ -125,7 +125,7 @@ export function HomepageHero({ randomHref }: Props) {
       </div>
 
       {/* ── Content — centered below watermark ────────────────────────────── */}
-      <div className="relative z-10 w-full max-w-2xl animate-fade-in flex flex-col items-center mt-6 sm:mt-8">
+      <div className="relative z-10 w-full max-w-3xl animate-fade-in flex flex-col items-center mt-6 sm:mt-8">
 
         {/* Headline */}
         <h1
@@ -162,18 +162,17 @@ export function HomepageHero({ randomHref }: Props) {
             </button>
           </div>
 
-          {/* "Cast me adrift" — proper teal-accented button, secondary to the field.
-              Prominent enough to register as a real action; quieter than the field. */}
+          {/* "Cast me adrift" — refined ghost action, secondary to the field */}
           {randomHref !== null && (
             <div className="mt-4 flex justify-center">
               <button
                 onClick={() => router.push(randomHref!)}
                 className={cn(
-                  "rounded-lg border border-primary/30 bg-primary/10",
-                  "px-5 py-2.5 text-sm font-semibold text-primary",
+                  "rounded-md border border-primary/40 bg-transparent",
+                  "px-4 py-1.5 text-sm font-normal text-primary/80",
                   "transition-colors duration-150",
-                  "hover:bg-primary/20 hover:border-primary/50",
-                  "focus:outline-none focus:ring-2 focus:ring-primary/20",
+                  "hover:border-primary/70 hover:text-primary hover:bg-primary/5",
+                  "focus:outline-none",
                 )}
               >
                 Cast me adrift
@@ -189,8 +188,8 @@ export function HomepageHero({ randomHref }: Props) {
           </p>
         )}
 
-        {/* Hub chips — flex-wrap (not nowrap) since max-w-2xl is narrower) */}
-        <div className="mt-6 flex flex-wrap gap-2 justify-center">
+        {/* Hub chips — single row at sm+, wraps on mobile */}
+        <div className="mt-6 flex flex-wrap sm:flex-nowrap gap-1.5 justify-center">
           {SECTIONS.map((s) => (
             <button
               key={s.slug}
