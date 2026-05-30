@@ -16,7 +16,7 @@ export function SectionLayout({ slug, children }: SectionLayoutProps) {
           style={{ borderBottomColor: section.color }}
         >
           <div className="mx-auto max-w-7xl">
-            <h1 className="text-lg font-semibold" style={{ color: section.color }}>
+            <h1 className="font-serif text-lg font-normal" style={{ color: section.color }}>
               {section.name}
             </h1>
             <p className="text-sm text-muted-foreground">{section.description}</p>

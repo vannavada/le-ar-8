@@ -37,7 +37,17 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
         mono: ["JetBrains Mono", "monospace"],
+      },
+      animation: {
+        "fade-in": "fadeIn 0.55s ease-out both",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

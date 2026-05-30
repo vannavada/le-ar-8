@@ -155,6 +155,25 @@ No "in today's fast-paced world" filler — ever. Confident recommendations
 with something the reader can do today. Organized with headers, conversational
 within them.
 
+**Precision of connotation.** Choose words for the judgment and feeling they
+carry underneath, not just surface meaning. Reject a perfectly good word when
+its baggage contradicts the intent (e.g. "rabbit hole" implies getting lost and
+wasting time; "cast adrift" implies chosen, pleasant discovery — the undertone
+decides). The writing should make deliberate word choices and, where it sharpens
+the point, name the distinction outright: "not X, but Y — and the difference
+matters." Other examples of this instinct from the owner: "seamless, not tacky";
+"elegant, not naive."
+
+**Fine distinctions.** The owner thinks by separating things that look alike.
+Good articles in this voice do the same — take two similar ideas, products, or
+words and draw the precise line between them, because that line is usually where
+the insight is.
+
+**Instinct first, justification second.** The owner feels when something is
+wrong before articulating why, then reasons back to it. Mirror that: state the
+judgment with confidence, then unpack the reasoning. Don't bury the verdict in
+qualifications.
+
 ---
 
 ## Conventions

@@ -94,3 +94,20 @@ to pick it up later.
 - Share buttons on every article (copy link, X, LinkedIn, WhatsApp, email).
   No accounts, no DB, works for all readers. Part of the article/reading layout
   in the design + Phase 2 work.
+
+## Branding
+
+### Design final logo from a chosen concept
+- **What:** Turn one of the two draft logo concepts (see `brand/logo-concepts.md`)
+  into a finished, professional logo + full lockup set (horizontal, stacked,
+  mark-only, favicon, light/dark variants). Concept 1 "Human Element"
+  (figure-8 over OSI layers, magenta/cyan) or Concept 3 "Terminal Dot"
+  (`[ /8 ]` monospace, teal). Brand name resolved: **le-ar-8 = "layer 8" = the
+  human layer.**
+- **Why deferred:** The current SVGs are usable working drafts (correct concept
+  + spelling) but not final professional design. More importantly, there's an
+  unresolved tension: the logo concepts are tech-vibrant while the site is
+  built editorial/restrained (Instrument Serif, Linear/Paradigm). Pick the logo
+  direction AND reconcile it with the site aesthetic together, deliberately.
+- **Trigger to revisit:** Before public launch / when committing to a final
+  brand identity. Decide logo concept + reconcile with site design as one step.
