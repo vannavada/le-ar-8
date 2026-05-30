@@ -1,3 +1,7 @@
+// DB query runs at request time, not at build — avoids build-time connection attempt
+// and ensures "cast me adrift" is truly random per request, not frozen at deploy.
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@content-platform/database";
 import { HomepageHero } from "./HomepageHero";
 
