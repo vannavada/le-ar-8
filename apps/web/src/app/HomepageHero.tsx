@@ -117,7 +117,7 @@ export function HomepageHero({ randomHref }: Props) {
           at all widths including mobile. pointer-events-none keeps it inert.  */}
       <div className="pointer-events-none select-none flex justify-center w-full" aria-hidden="true">
         <span
-          className="font-mono font-bold text-foreground opacity-[0.05] dark:opacity-[0.07] blur-[2px]"
+          className="font-mono font-bold text-foreground opacity-[0.05] dark:opacity-[0.07]"
           style={{ fontSize: "clamp(8rem, 22vw, 26rem)", lineHeight: 1, letterSpacing: "-0.02em" }}
         >
           [/8]
