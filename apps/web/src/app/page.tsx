@@ -1,58 +1,52 @@
 import Link from "next/link";
+import { SECTIONS } from "@/lib/sections";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default function HomePage() {
   return (
-    <div className="space-y-8">
-      <section className="text-center py-12">
-        <h1 className="text-4xl font-bold text-primary-700">Content Platform</h1>
-        <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-          Tech reviews, professional discourse, financial tools, and more.
-        </p>
+    <div className="flex flex-col">
+      {/* Hero */}
+      <section className="py-20 px-4 text-center">
+        <div className="mx-auto max-w-3xl">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+            Tech reviews.
+            <br />
+            <span className="text-primary">Deep reads. Financial clarity.</span>
+          </h1>
+          <p className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto">
+            One writer. Six sections. Honest takes on technology, money,
+            and everything in between.
+          </p>
+        </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Link
-          href="/tech-vault"
-          className="block p-6 rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:shadow-md transition"
-        >
-          <h2 className="text-xl font-semibold text-primary-600">TechVault</h2>
-          <p className="mt-2 text-gray-600">Product reviews and showcases</p>
-        </Link>
-        <Link
-          href="/thought-forge"
-          className="block p-6 rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:shadow-md transition"
-        >
-          <h2 className="text-xl font-semibold text-primary-600">ThoughtForge</h2>
-          <p className="mt-2 text-gray-600">Professional discourse and articles</p>
-        </Link>
-        <Link
-          href="/mindstream"
-          className="block p-6 rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:shadow-md transition"
-        >
-          <h2 className="text-xl font-semibold text-primary-600">MindStream</h2>
-          <p className="mt-2 text-gray-600">Quick thoughts and discussions</p>
-        </Link>
-        <Link
-          href="/finance-hub"
-          className="block p-6 rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:shadow-md transition"
-        >
-          <h2 className="text-xl font-semibold text-primary-600">FinanceHub</h2>
-          <p className="mt-2 text-gray-600">Financial tools and dashboards</p>
-        </Link>
-        <Link
-          href="/learn-hub"
-          className="block p-6 rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:shadow-md transition"
-        >
-          <h2 className="text-xl font-semibold text-primary-600">LearnHub</h2>
-          <p className="mt-2 text-gray-600">Courses and learning</p>
-        </Link>
-        <Link
-          href="/community"
-          className="block p-6 rounded-lg border border-gray-200 bg-white hover:border-primary-400 hover:shadow-md transition"
-        >
-          <h2 className="text-xl font-semibold text-primary-600">CommunitySpace</h2>
-          <p className="mt-2 text-gray-600">Topic-based discussions</p>
-        </Link>
+      {/* Sections grid */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-2xl font-semibold text-center mb-10">
+            Browse the sections
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {SECTIONS.map((section) => (
+              <Link key={section.slug} href={section.href} className="group">
+                <Card className="h-full transition-shadow hover:shadow-md">
+                  <CardHeader>
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-3"
+                      style={{ backgroundColor: section.color }}
+                    >
+                      {section.name[0]}
+                    </div>
+                    <CardTitle className="group-hover:text-primary transition-colors text-lg">
+                      {section.name}
+                    </CardTitle>
+                    <CardDescription>{section.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );

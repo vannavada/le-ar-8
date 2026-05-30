@@ -1,14 +1,16 @@
 import { defineConfig } from "prisma/config";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
-import "dotenv/config";
+import { config } from "dotenv";
+import { resolve } from "path";
+
+// When Prisma runs this from packages/database/, cwd is packages/database/
+// Two levels up is the repo root where .env lives
+config({ path: resolve(process.cwd(), "../../.env") });
+// Fallback: if cwd is already the repo root (e.g. direct invocation)
+config({ path: resolve(process.cwd(), ".env") });
 
 export default defineConfig({
   schema: "./prisma/schema.prisma",
-  migrate: {
-    async adapter() {
-      const pool = new Pool({ connectionString: process.env.DATABASE_URL! });
-      return new PrismaPg(pool);
-    },
+  datasource: {
+    url: process.env.DATABASE_URL!,
   },
 });

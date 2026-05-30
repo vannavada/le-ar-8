@@ -131,6 +131,8 @@ infrastructure/kubernetes/secrets/
 # Database dumps
 *.sql
 *.dump
+# Prisma migration files must be committed even though *.sql is ignored above
+!packages/database/prisma/migrations/**/*.sql
 
 # SSL Certificates (don't commit real certs)
 *.crt

@@ -2,52 +2,53 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const nav = [
-  { href: "/", label: "Home" },
-  { href: "/tech-vault", label: "TechVault" },
-  { href: "/thought-forge", label: "ThoughtForge" },
-  { href: "/mindstream", label: "MindStream" },
-  { href: "/finance-hub", label: "FinanceHub" },
-  { href: "/learn-hub", label: "LearnHub" },
-  { href: "/community", label: "Community" },
-];
+import { useSession } from "next-auth/react";
+import { SECTIONS } from "@/lib/sections";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { UserMenu } from "@/components/auth/user-menu";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   return (
-    <header className="border-b border-gray-200 bg-white">
-      <div className="container mx-auto px-4">
-        <nav className="flex items-center justify-between h-14">
-          <Link href="/" className="font-semibold text-primary-600">
-            Content Platform
-          </Link>
-          <ul className="flex gap-6">
-            {nav.map(({ href, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className={
-                    pathname === href || (href !== "/" && pathname.startsWith(href))
-                      ? "text-primary-600 font-medium"
-                      : "text-gray-600 hover:text-primary-600"
-                  }
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="flex gap-4">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+        <Link href="/" className="text-xl font-bold tracking-tight">
+          lear8
+        </Link>
+
+        <nav className="hidden md:flex items-center space-x-1">
+          {SECTIONS.map((section) => (
+            <Link
+              key={section.slug}
+              href={section.href}
+              className={cn(
+                "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                pathname.startsWith(section.href)
+                  ? "bg-muted text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              )}
+            >
+              {section.name}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center space-x-2">
+          <ThemeToggle />
+          {session?.user ? (
+            <UserMenu user={session.user} />
+          ) : (
             <Link
               href="/api/auth/signin"
-              className="text-sm text-gray-600 hover:text-primary-600"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Sign in
             </Link>
-          </div>
-        </nav>
+          )}
+        </div>
       </div>
     </header>
   );

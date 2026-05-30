@@ -43,10 +43,18 @@ embedded seamlessly into content.
 4. **Repository pattern.** Data access lives in `apps/web/src/repositories/`,
    separated from routers. Keep this pattern for every new section.
 5. **Auth = NextAuth JWT.** Context is derived only from the signed JWT, never
-   from client headers. Admin accounts only — no reader sign-up.
-6. **Authorization.** `publicProcedure` for reads. `adminProcedure` (role ===
-   "ADMIN", carried in the JWT) for every content mutation. Defined in
-   `apps/web/src/server/trpc.ts`.
+   from client headers. No reader sign-up in the current model — accounts are for
+   authors only (EDITOR/ADMIN). (Reader accounts are a documented future
+   amendment in backlog.md, not built now.)
+6. **Authorization — three roles: USER, EDITOR, ADMIN.** `publicProcedure` for
+   reads. `editorProcedure` (role EDITOR or ADMIN) for content authoring —
+   create/edit/publish articles in the hubs. `adminProcedure` (role ADMIN only)
+   for governance — user/role management, site settings, infrastructure-level
+   actions. Roles are carried in the JWT. Procedures defined in
+   `apps/web/src/server/trpc.ts`. Rule of thumb: **editors author, admins
+   govern.** (The editor *management* UI — invites, multi-author attribution,
+   per-author edit rules — is deferred; see backlog. Only the role + procedures
+   are built now.)
 7. **Content format = Markdown.** Stored as Markdown text, rendered with
    `remark-gfm`. The AI pipeline outputs Markdown natively. No rich-text editor,
    no ProseMirror JSON. Admin writing UI is split-pane Markdown + live preview.
@@ -69,7 +77,8 @@ embedded seamlessly into content.
     provider (not `prisma-client-js`), ESM, with the `@prisma/adapter-pg`
     driver adapter. Generated client outputs to a path in source, not
     node_modules. Min Node 20.19+ / TypeScript 5.4+. Do not downgrade.
-13. **User.role defaults to USER**, never ADMIN. Admins are promoted manually.
+13. **User.role defaults to USER**, never EDITOR or ADMIN. Authors are promoted
+    manually (USER → EDITOR or ADMIN) until an invite/management UI exists.
 
 ---
 
@@ -85,8 +94,8 @@ embedded seamlessly into content.
 | CommunitySpace | `/community` | Placeholder for now (name only — NOT a social feature build) |
 
 Every content section follows the TechVault pattern: a Prisma model, a
-repository, a tRPC router (public reads + admin mutations), list/detail/new
-pages, Markdown body.
+repository, a tRPC router (public reads + `editorProcedure` mutations),
+list/detail/new pages, Markdown body.
 
 ---
 
@@ -104,16 +113,37 @@ pages, Markdown body.
 
 ---
 
-## AI content pipeline (Phase 5)
+## AI authoring system (two modes)
 
-`apps/pipeline` runs on a schedule (Vercel Cron). Flow:
-RSS/public sources → MCP servers fetch + dedupe → Claude API generates a draft
-in the owner's voice → affiliate-mcp suggests links → saved to a `ContentDraft`
-table (status PENDING) → **owner reviews and publishes**. Nothing auto-publishes.
+The same machinery powers two trigger modes. Shared parts: a research step, a
+voice-generation step (Claude API + the owner's style guide), a `ContentDraft`
+model, and a review queue. **Nothing auto-publishes — the owner reviews and
+publishes every draft.**
+
+**Mode 1 — Pull (on-demand authoring). Build this FIRST, right after Phase 2.**
+The owner supplies a topic *and a thesis/angle* ("teenagers' overuse of 'like'
+— my angle: the shift is away from eloquence toward sounding uncertain"). A
+web-search/MCP research step gathers freely available material on that specific
+topic; Claude writes the article *making the owner's argument*, evidence
+attributed, in the owner's voice; the tool proposes a hub (owner can override);
+it lands in the review queue. Critical: the tool amplifies the owner's thesis,
+it does not invent insight. A bare topic with no thesis produces generic slop —
+always feed it an opinion. Build the trigger first as an MCP server usable from
+Claude Code/Desktop (owner already works there); an in-site admin authoring page
+can come later. This pull tool is how the empty hubs get filled with real
+content, so it precedes the scheduled mode.
+
+**Mode 2 — Push (scheduled pipeline). Later, lower priority.**
+`apps/pipeline` runs on a schedule (Vercel Cron). RSS/public sources → MCP
+servers fetch + dedupe → Claude generates drafts across hubs → affiliate-mcp
+suggests links → drafts land in the review queue. This is a "keep hubs fresh
+automatically" convenience, built after the pull tool is working.
 
 MCP servers: `news-mcp`, `finance-mcp`, `rates-mcp`, `publisher-mcp`,
-`affiliate-mcp`. Sources must be public (news, RSS, public APIs). Never insider
-or paywalled data. Always attribute sources with an outbound link.
+`affiliate-mcp`, plus a research/web-search capability for the pull mode.
+Sources must be public (news, RSS, public APIs, open web). Never insider or
+paywalled data. Always attribute sources with an outbound link, synthesize in
+the owner's voice — never copy.
 
 ---
 
@@ -156,9 +186,17 @@ within them.
   funnel), then US mortgage, India EMI, currency impact, retirement.
 - **Phase 4.** Affiliate system — model, `NestMarginCTA`, `ProductCard`,
   disclosure, admin management.
-- **Phase 5.** AI pipeline — `apps/pipeline`, MCP servers, Claude API, draft queue.
-- **Phase 6.** Interest rates — `rates-mcp` + Vercel Cron, US/India rate pages.
-- **Phase 7.** Polish + deploy — PostHog, SEO, sitemap, domain, go live.
+- **Phase 5 — Pull authoring tool (on-demand).** The AI authoring system's
+  pull mode: MCP research + voice generation + draft queue, triggered by the
+  owner supplying a topic + thesis. Build as an MCP server usable from Claude
+  Code first. This is how the hubs get filled, so it comes before the scheduled
+  pipeline. (Can start right after Phase 2 if the owner wants content sooner.)
+- **Phase 6.** Scheduled pipeline (push) — `apps/pipeline`, cron, RSS MCP
+  servers. Lower priority "keep hubs fresh" convenience.
+- **Phase 7.** Interest rates — `rates-mcp` + Vercel Cron, US/India rate pages.
+- **Phase 8.** Polish + deploy refinements — PostHog, SEO, sitemap. (Initial
+  deploy to lear8.com happens earlier, right after the design pass — build in
+  public.)
 
 Work one phase at a time. Verify with `tsc` and a local run before committing.
 Branch per phase. Commit with clear messages. Push to
