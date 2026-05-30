@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { router, publicProcedure, adminProcedure } from "../trpc";
+import { router, publicProcedure, editorProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { createTechVaultRepository } from "@/repositories/tech-vault.repository";
 import { TechVaultCategory } from "@content-platform/database";
@@ -32,13 +32,13 @@ export const techVaultRouter = router({
     const repo = createTechVaultRepository(ctx.prisma);
     const review = await repo.getBySlug(input.slug);
     if (!review) throw new TRPCError({ code: "NOT_FOUND", message: "Review not found" });
-    if (!review.published && ctx.role !== "ADMIN") {
+    if (!review.published && ctx.role !== "ADMIN" && ctx.role !== "EDITOR") {
       throw new TRPCError({ code: "NOT_FOUND", message: "Review not found" });
     }
     return review;
   }),
 
-  create: adminProcedure
+  create: editorProcedure
     .input(
       z.object({
         title: z.string().min(1).max(200),
@@ -61,7 +61,7 @@ export const techVaultRouter = router({
       });
     }),
 
-  update: adminProcedure
+  update: editorProcedure
     .input(
       z.object({
         id: z.string().cuid(),
@@ -82,7 +82,7 @@ export const techVaultRouter = router({
       return repo.update(id, data);
     }),
 
-  delete: adminProcedure.input(z.object({ id: z.string().cuid() })).mutation(async ({ ctx, input }) => {
+  delete: editorProcedure.input(z.object({ id: z.string().cuid() })).mutation(async ({ ctx, input }) => {
     const repo = createTechVaultRepository(ctx.prisma);
     await repo.delete(input.id);
     return { success: true };
