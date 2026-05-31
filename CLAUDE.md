@@ -1,8 +1,22 @@
 # CLAUDE.md — le-ar-8
 
-Project knowledge for Claude Code. Read this first, every session. These are
-settled decisions. Do not reopen them without the owner explicitly saying so.
-If a request conflicts with a locked decision below, push back and cite it.
+**Read `ENGINEERING-STANDARDS.md` first, every session.** It holds the universal
+security, auth, data, code-hygiene, and working-style rules every project
+inherits. *This* file covers only le-ar-8-specific decisions and parameters.
+Where the baseline states a principle, this file sets the value.
+
+These are settled decisions. Do not reopen them without the owner explicitly
+saying so. If a request conflicts with a locked decision below, push back and
+cite it.
+
+### Baseline parameters for this project
+
+- **Typecheck command:** `npx tsc --noEmit` — zero errors before every commit.
+- **Push target:** `git@github.com:vannavada/le-ar-8.git`.
+- **Financial/PII conditionals:** mostly N/A — no reader accounts, no money
+  tracked. Still in force: author (EDITOR/ADMIN) session handling per baseline,
+  an inactivity timeout on the admin/authoring area, and `AffiliateProgram`
+  credentials encrypted at rest.
 
 ---
 
@@ -121,12 +135,13 @@ list/detail/new pages, Markdown body.
 ## Affiliate model
 
 - One `AffiliateProgram` table: merchant, network, your affiliate ID, base URL,
-  commission, categories. Credentials encrypted.
+  commission, categories. Credentials encrypted (per BASELINE).
 - Affiliate links render as **native content** — inline links or product cards
   using the site's own design system. Never banners, never popups, never a
   separate ad unit. "Seamless, not tacky" is the standard.
 - FTC disclosure is required: one line, body-text styling, top of any page with
-  affiliate links. Non-negotiable.
+  affiliate links. Non-negotiable. (Baseline requires disclosure of material
+  relationships; this is the lear8 parameter.)
 - `affiliate-mcp` (Phase 4/5) scans drafts, extracts entities, matches the
   catalog, suggests placements. Owner approves during draft review.
 
@@ -195,16 +210,14 @@ qualifications.
 
 ---
 
-## Conventions
+## Conventions (project-specific; universal hygiene is in BASELINE)
 
-- TypeScript everywhere, strict.
+- TypeScript everywhere. (Strict-mode rule is in BASELINE.)
 - `@/*` maps to `apps/web/src/*`.
 - Import Prisma types from `@content-platform/database`, not `@prisma/client`.
 - tRPC v11: the superjson transformer is set on the router init in
   `server/trpc.ts` — never passed to `fetchRequestHandler`.
-- Tailwind for styling. Distinctive, intentional design — avoid generic AI
-  aesthetics (no default purple-on-white gradients, no Inter-everywhere).
-- Run `npx tsc --noEmit` before every commit. Zero errors required.
+- Tailwind for styling. (Distinctive-design rule is in BASELINE.)
 
 ---
 
@@ -236,8 +249,7 @@ qualifications.
   deploy to lear8.com happens earlier, right after the design pass — build in
   public.)
 
-Work one phase at a time. Verify with `tsc` and a local run before committing.
-Branch per phase. Commit with clear messages. Push to
+Work one phase at a time (per BASELINE). Push to
 `git@github.com:vannavada/le-ar-8.git`.
 
 ---

@@ -127,6 +127,7 @@ infrastructure/kubernetes/secrets/
 *.backup
 *.bak
 *.old
+CLAUDE_OLD.md
 
 # Database dumps
 *.sql
