@@ -13,12 +13,35 @@ readers read. It is **uni-directional** — no reader accounts, no comments, no
 reactions, no community/social features. Revenue comes from affiliate links
 embedded seamlessly into content.
 
+**Single-author, not multi-author.** le-ar-8 is the owner's personal hub — one
+voice, one byline, one thesis (see Brand name & meaning, Writing voice). It is
+NOT a multi-contributor publication; friends/experts do not publish under their
+own bylines or get author accounts. The single-author identity is core to the
+brand ("a human writing for humans" — *a* human).
+
+**Friends/experts can be SOURCES, not authors.** The owner may reach out to
+knowledgeable people for their opinions/input on a topic, then *synthesize that
+into the owner's own article, in the owner's voice* ("I asked people who know X;
+here's what I learned, distilled for a reader like me"). This is sourcing /
+primary-source reporting, not co-authorship — the article stays the owner's. It
+keeps the site single-author and uni-directional, and it's a genuine quality
+strength (original expert input is exactly what generic AI content lacks).
+- **Sourcing norm:** get the source's consent, agree how to attribute them
+  (named / "a friend who works in X" / anonymous), and represent their views
+  accurately.
+- **Implication for the authoring engine (Phase 4):** "synthesize gathered
+  expert input into my voice" is a valid authoring INPUT mode, alongside
+  "research a topic from scratch."
+
 ## What this is NOT
 
 - ❌ Not a social platform. No user-generated content. No comments. No reactions.
+- ❌ Not a multi-author publication. Single voice, owner's byline. (Friends can be
+  sources the owner synthesizes from, never bylined authors — see above.)
 - ❌ Not a finance app. It does not track anyone's money. (That's nestmargin.com.)
 - ❌ Not paid/subscription on this site. Monetization is affiliate links only.
 - ❌ Not a mobile app. Responsive web only.
+
 
 ## Brand name & meaning (canonical)
 
