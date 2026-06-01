@@ -4,6 +4,8 @@ export interface SectionMeta {
   description: string;
   color: string;
   href: string;
+  /** Show the terminal [/8] mark in this hub's section header (technical hubs only). */
+  terminalMark?: boolean;
 }
 
 export const SECTIONS: SectionMeta[] = [
@@ -13,6 +15,7 @@ export const SECTIONS: SectionMeta[] = [
     description: "Product reviews — tech, men's lifestyle, automotive, and innovation",
     color: "#8b5cf6",
     href: "/tech-vault",
+    terminalMark: true,
   },
   {
     slug: "thought-forge",
@@ -34,6 +37,7 @@ export const SECTIONS: SectionMeta[] = [
     description: "Finance articles, calculators, and rate tables",
     color: "#06b6d4",
     href: "/finance-hub",
+    terminalMark: true,
   },
   {
     slug: "learn-hub",

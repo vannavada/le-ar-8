@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import type { Hub } from "@content-platform/database";
 import { trpc } from "@/trpc";
-import { hubToRoute } from "@/lib/hub-utils";
+import { hubToRoute, hubColor, hubName } from "@/lib/hub-utils";
 import { ArticleBody } from "./ArticleBody";
 import { ShareButtons } from "./ShareButtons";
 
@@ -23,9 +23,13 @@ export function ArticleDetail({ hub, slug }: ArticleDetailProps) {
     { refetchOnWindowFocus: false }
   );
 
+  const accentColor = hubColor(hub);
+  const route = hubToRoute(hub);
+
   if (isLoading) {
     return (
       <div className="max-w-3xl mx-auto animate-pulse space-y-4 pt-4">
+        <div className="h-3 w-20 bg-muted rounded" />
         <div className="h-8 w-2/3 bg-muted rounded" />
         <div className="h-4 w-1/3 bg-muted/60 rounded" />
         <div className="space-y-2 mt-6">
@@ -41,28 +45,36 @@ export function ArticleDetail({ hub, slug }: ArticleDetailProps) {
     return <p className="mt-8 text-muted-foreground">Article not found.</p>;
   }
 
-  const route = hubToRoute(hub);
-
   return (
     <article className="max-w-3xl mx-auto">
-      {/* Editor affordances — visible to EDITOR/ADMIN only */}
-      {isEditor && (
-        <div className="mb-4 flex items-center gap-3">
-          <Link
-            href={`/${route}/${slug}/edit`}
-            className="text-xs text-primary hover:underline"
-          >
-            Edit
-          </Link>
-          {!data.published && (
-            <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-              Draft
-            </span>
-          )}
-        </div>
-      )}
+      {/* Hub label + editor affordances */}
+      <div className="flex items-center gap-3 mb-3">
+        <span
+          className="text-xs font-medium tracking-wide uppercase"
+          style={{ color: accentColor }}
+        >
+          {hubName(hub)}
+        </span>
 
-      <h1 className="mt-2 text-3xl font-bold font-serif leading-tight">{data.title}</h1>
+        {isEditor && (
+          <>
+            <span className="text-muted-foreground/40 text-xs">·</span>
+            <Link
+              href={`/${route}/${slug}/edit`}
+              className="text-xs text-primary hover:underline"
+            >
+              Edit
+            </Link>
+            {!data.published && (
+              <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                Draft
+              </span>
+            )}
+          </>
+        )}
+      </div>
+
+      <h1 className="text-3xl font-bold font-serif leading-tight">{data.title}</h1>
 
       {data.productName && data.rating != null && (
         <p className="mt-2 text-sm text-muted-foreground">
@@ -83,7 +95,11 @@ export function ArticleDetail({ hub, slug }: ArticleDetailProps) {
           {data.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground"
+              className="rounded-full px-2.5 py-0.5 text-xs"
+              style={{
+                backgroundColor: `${accentColor}18`,
+                color: accentColor,
+              }}
             >
               {tag}
             </span>

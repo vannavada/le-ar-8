@@ -9,7 +9,7 @@ export function Footer() {
           © {new Date().getFullYear()} le-ar-8
         </span>
         <nav className="flex flex-wrap gap-x-4 gap-y-1">
-          {SECTIONS.map((s) => (
+          {SECTIONS.filter((s) => s.slug !== "community" && s.slug !== "mindstream").map((s) => (
             <Link
               key={s.slug}
               href={s.href}
@@ -18,6 +18,12 @@ export function Footer() {
               {s.name}
             </Link>
           ))}
+          <Link
+            href="/now"
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Now
+          </Link>
         </nav>
       </div>
     </footer>
