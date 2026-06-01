@@ -13,7 +13,7 @@ export const SECTIONS: SectionMeta[] = [
     slug: "tech-vault",
     name: "TechVault",
     description: "Product reviews — tech, men's lifestyle, automotive, and innovation",
-    color: "#8b5cf6",
+    color: "#6b9fc0", // slate blue
     href: "/tech-vault",
     terminalMark: true,
   },
@@ -21,21 +21,21 @@ export const SECTIONS: SectionMeta[] = [
     slug: "thought-forge",
     name: "ThoughtForge",
     description: "Professional and industry articles",
-    color: "#f59e0b",
+    color: "#c27a55", // terracotta
     href: "/thought-forge",
   },
   {
     slug: "mindstream",
     name: "MindStream",
     description: "Personal thoughts, from one-liners to full pieces",
-    color: "#10b981",
+    color: "#a87898", // mauve — reserved for Phase 2.5
     href: "/mindstream",
   },
   {
     slug: "finance-hub",
     name: "FinanceHub",
     description: "Finance articles, calculators, and rate tables",
-    color: "#06b6d4",
+    color: "#5f9e7e", // sage
     href: "/finance-hub",
     terminalMark: true,
   },
@@ -43,14 +43,7 @@ export const SECTIONS: SectionMeta[] = [
     slug: "learn-hub",
     name: "LearnHub",
     description: "Coming soon",
-    color: "#f43f5e",
+    color: "#b8944a", // ochre
     href: "/learn-hub",
-  },
-  {
-    slug: "community",
-    name: "CommunitySpace",
-    description: "Coming soon",
-    color: "#6366f1",
-    href: "/community",
   },
 ];

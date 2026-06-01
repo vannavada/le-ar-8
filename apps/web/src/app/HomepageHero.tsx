@@ -40,10 +40,6 @@ const KEYWORD_MAP: Record<string, string[]> = {
     "study", "education", "skill", "skills", "training", "guide", "guides",
     "beginner", "explained", "teach", "teaching", "how",
   ],
-  "community": [
-    "community", "forum", "discussion", "discussions", "group", "groups",
-    "social", "network", "people", "connect",
-  ],
 };
 
 function findBestHub(query: string): string | null {

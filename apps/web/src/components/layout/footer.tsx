@@ -9,7 +9,7 @@ export function Footer() {
           © {new Date().getFullYear()} le-ar-8
         </span>
         <nav className="flex flex-wrap gap-x-4 gap-y-1">
-          {SECTIONS.filter((s) => s.slug !== "community" && s.slug !== "mindstream").map((s) => (
+          {SECTIONS.filter((s) => s.slug !== "mindstream").map((s) => (
             <Link
               key={s.slug}
               href={s.href}

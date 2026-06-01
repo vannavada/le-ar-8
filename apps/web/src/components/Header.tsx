@@ -53,7 +53,9 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center space-x-1">
-          {SECTIONS.map((section) => (
+          {SECTIONS.filter((s) =>
+            ["tech-vault", "thought-forge", "finance-hub", "learn-hub"].includes(s.slug)
+          ).map((section) => (
             <Link
               key={section.slug}
               href={section.href}
@@ -67,6 +69,17 @@ export function Header() {
               {section.name}
             </Link>
           ))}
+          <Link
+            href="/now"
+            className={cn(
+              "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+              pathname === "/now" || pathname.startsWith("/now/")
+                ? "bg-muted text-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
+            )}
+          >
+            Now
+          </Link>
         </nav>
 
         <div className="flex items-center space-x-2">
