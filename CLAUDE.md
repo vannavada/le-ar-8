@@ -1,22 +1,8 @@
 # CLAUDE.md — le-ar-8
 
-**Read `ENGINEERING-STANDARDS.md` first, every session.** It holds the universal
-security, auth, data, code-hygiene, and working-style rules every project
-inherits. *This* file covers only le-ar-8-specific decisions and parameters.
-Where the baseline states a principle, this file sets the value.
-
-These are settled decisions. Do not reopen them without the owner explicitly
-saying so. If a request conflicts with a locked decision below, push back and
-cite it.
-
-### Baseline parameters for this project
-
-- **Typecheck command:** `npx tsc --noEmit` — zero errors before every commit.
-- **Push target:** `git@github.com:vannavada/le-ar-8.git`.
-- **Financial/PII conditionals:** mostly N/A — no reader accounts, no money
-  tracked. Still in force: author (EDITOR/ADMIN) session handling per baseline,
-  an inactivity timeout on the admin/authoring area, and `AffiliateProgram`
-  credentials encrypted at rest.
+Project knowledge for Claude Code. Read this first, every session. These are
+settled decisions. Do not reopen them without the owner explicitly saying so.
+If a request conflicts with a locked decision below, push back and cite it.
 
 ---
 
@@ -33,6 +19,44 @@ embedded seamlessly into content.
 - ❌ Not a finance app. It does not track anyone's money. (That's nestmargin.com.)
 - ❌ Not paid/subscription on this site. Monetization is affiliate links only.
 - ❌ Not a mobile app. Responsive web only.
+
+## Brand name & meaning (canonical)
+
+The name **le-ar-8** is intentionally layered. This is the single source of
+truth for what it means and how to talk about it — for the About page, marketing,
+and the AI authoring tool's sense of the site's identity.
+
+**Primary meaning — the layered story (lead with this):**
+- **le-ar-8 ≈ "layer 8."** In the OSI networking model there are 7 layers (the
+  machine stack). "Layer 8" is industry slang for the layer above them all: the
+  human layer — the person who thinks, decides, and writes. That's the thesis: a
+  human writing for humans, above the machine.
+- **"lear" = to learn / to teach (lore).** Genuine etymology: Middle English,
+  and in Scottish/Northern English "to lear" means to teach or learn. For a
+  knowledge/content hub, the name literally evokes learning. This is real, not
+  invented — lean on it.
+- **le + ar + 8.** "le" (French "the"), "ar" (augmented reality / augmentation),
+  "8" = *Ashta*, the sacred eight in Hindu tradition (Ashta Lakshmi, Ashta
+  Dikkulu — the eight directions/forms). The 8 also reads visually as infinity
+  (and echoes the figure-8 logo).
+
+**Positioning line worth using:** "Learn and create" (the "Lear-ate" reading) —
+used as genuine substance (the site researches, forms a thesis, creates
+content), not as a pun.
+
+**Tone the name supports:** wisdom, authority, depth — earned through the quality
+of the writing and the restraint of the design, NOT borrowed prestige. This
+aligns with the editorial, Instrument-Serif, charcoal+teal direction.
+
+**Do NOT use (off-brand or risky):**
+- ❌ The **Learjet** association ("premium/elite/fast"). Borrowed prestige from
+  an unrelated, trademarked aviation brand — off-strategy and a needless
+  trademark proximity.
+- ❌ **LEAR backronyms** ("Learn Engage Achieve Repeat", etc.). Generic
+  content-marketing filler; reverse-engineered acronyms make the name feel less
+  considered, not more. The layered story above is richer.
+- ❌ Invented sound-alikes ("Luminate", "Elevate") — they describe brands le-ar-8
+  is not.
 
 ## Relationship to nestmargin.com (critical)
 
@@ -135,14 +159,14 @@ list/detail/new pages, Markdown body.
 ## Affiliate model
 
 - One `AffiliateProgram` table: merchant, network, your affiliate ID, base URL,
-  commission, categories. Credentials encrypted (per BASELINE).
+  commission, categories. Credentials encrypted.
 - Affiliate links render as **native content** — inline links or product cards
   using the site's own design system. Never banners, never popups, never a
   separate ad unit. "Seamless, not tacky" is the standard.
 - FTC disclosure is required: one line, body-text styling, top of any page with
-  affiliate links. Non-negotiable. (Baseline requires disclosure of material
-  relationships; this is the lear8 parameter.)
-- `affiliate-mcp` (Phase 4/5) scans drafts, extracts entities, matches the
+  affiliate links. Non-negotiable.
+- `affiliate-mcp` (built with the affiliate system in Phase 3, used by the
+  pull-authoring engine in Phase 4) scans drafts, extracts entities, matches the
   catalog, suggests placements. Owner approves during draft review.
 
 ---
@@ -210,47 +234,129 @@ qualifications.
 
 ---
 
-## Conventions (project-specific; universal hygiene is in BASELINE)
+## Conventions
 
-- TypeScript everywhere. (Strict-mode rule is in BASELINE.)
+- TypeScript everywhere, strict.
 - `@/*` maps to `apps/web/src/*`.
 - Import Prisma types from `@content-platform/database`, not `@prisma/client`.
 - tRPC v11: the superjson transformer is set on the router init in
   `server/trpc.ts` — never passed to `fetchRequestHandler`.
-- Tailwind for styling. (Distinctive-design rule is in BASELINE.)
+- Tailwind for styling. Distinctive, intentional design — avoid generic AI
+  aesthetics (no default purple-on-white gradients, no Inter-everywhere).
+- Run `npx tsc --noEmit` before every commit. Zero errors required.
 
 ---
 
 ## Build phases
 
-- **Phase 1 — foundation (apply to real repo first; not yet applied).**
-  Delete `apps/api`, consolidate server into `apps/web`, add `adminProcedure`
-  with role in the JWT, fix the tRPC transformer + imageUrl-null bugs. **Also
-  upgrade to Prisma 7** in the same pass: `prisma-client` provider, ESM,
-  `@prisma/adapter-pg`, generated output in source. The only file the Prisma 7
-  import-path change touches is `packages/database/src/index.ts` — every
-  repository/router imports from `@content-platform/database`, so they're
-  insulated. Verify with `npx tsc --noEmit` before committing.
-- **Phase 2 — NEXT.** ThoughtForge, MindStream, FinanceHub article models +
-  repositories + routers + pages. Markdown editor + renderer. (Changes schema.)
-- **Phase 3.** Calculators — cross-border net worth first (the nestmargin
-  funnel), then US mortgage, India EMI, currency impact, retirement.
-- **Phase 4.** Affiliate system — model, `NestMarginCTA`, `ProductCard`,
-  disclosure, admin management.
-- **Phase 5 — Pull authoring tool (on-demand).** The AI authoring system's
-  pull mode: MCP research + voice generation + draft queue, triggered by the
-  owner supplying a topic + thesis. Build as an MCP server usable from Claude
-  Code first. This is how the hubs get filled, so it comes before the scheduled
-  pipeline. (Can start right after Phase 2 if the owner wants content sooner.)
-- **Phase 6.** Scheduled pipeline (push) — `apps/pipeline`, cron, RSS MCP
-  servers. Lower priority "keep hubs fresh" convenience.
-- **Phase 7.** Interest rates — `rates-mcp` + Vercel Cron, US/India rate pages.
-- **Phase 8.** Polish + deploy refinements — PostHog, SEO, sitemap. (Initial
-  deploy to lear8.com happens earlier, right after the design pass — build in
-  public.)
+Status as of this writing: **Phases 1 and 1.x are DONE and live** — foundation
+(Prisma 7, consolidated server, three-role auth), the design system, the brand
+identity + striking homepage, and the EDITOR role are all built, merged, and
+deployed. **lear8.com is live.** Remaining phases below.
 
-Work one phase at a time (per BASELINE). Push to
-`git@github.com:vannavada/le-ar-8.git`.
+- **Phase 2 — NEXT (content hubs).** One shared `Article` model absorbing
+  TechVault, covering TECH_VAULT / THOUGHT_FORGE / FINANCE_HUB / LEARN_HUB
+  (hubs differ by editorial intent, not data shape). Repository, router,
+  per-hub pages, Markdown editor + renderer, edit/delete UI, sharing buttons,
+  per-hub theming, plus a standalone `/now` page. See `phase-2-spec.md` for the
+  full plan. (MindStream → Phase 2.5, microblog, separate model. CommunitySpace
+  dropped — "community" implies multi-user, which breaks uni-directional; logged
+  in backlog as a future decision.)
+- **Phase 3 — Affiliate system (PULLED EARLY — was Phase 4).** Build this soon
+  after Phase 2, so content is monetizable the moment it exists. AffiliateProgram
+  model, `NestMarginCTA`, `ProductCard`, FTC disclosure, admin management,
+  magenta CTA styling. Rationale: affiliate is the *fastest realistic revenue
+  path* (see Revenue strategy below) and rewards relevant content immediately —
+  no point publishing monetizable content (TechVault gadgets, FinanceHub money
+  tools) without the affiliate layer ready.
+- **Phase 4 — Pull authoring engine (on-demand).** The AI authoring system's
+  pull mode: MCP research + voice generation + draft queue, triggered by owner
+  topic + thesis. **Build as an MCP server usable from Claude Code FIRST** to
+  prove and tune the generation quality/voice cheaply, BEFORE wrapping it in a
+  web cockpit (see Authoring cockpit north-star). This fills the hubs with
+  quality, thesis-driven articles. Write the engine **host-agnostic** so it
+  migrates to cloud hosting later without a rewrite.
+- **Phase 5 — Calculators.** Cross-border net worth first (the nestmargin
+  funnel), then US mortgage, India EMI, currency impact, retirement.
+- **Phase 6 — Scheduled pipeline (push).** `apps/pipeline`, cron, RSS MCP
+  servers. Lower-priority "keep hubs fresh" convenience.
+- **Phase 7 — Interest rates.** `rates-mcp` + Vercel Cron, US/India rate pages.
+- **Phase 8 — Polish.** PostHog analytics, SEO/sitemap/meta refinement, perf.
+
+Work one phase at a time. Verify with `tsc` and a local run before committing.
+Branch per phase. Commit to the branch freely; merge to main deliberately after
+review. Push to `git@github.com:vannavada/le-ar-8.git` via SSH.
+
+---
+
+## Revenue strategy (how this site makes money)
+
+**Quality + affiliate + targeting — NOT volume.** The goal is revenue sooner,
+but the path is genuinely useful, thesis-driven articles aimed at the right
+topics, NOT high-volume AI content.
+
+- **Why not volume:** high-volume AI-generated content aimed at ad revenue is
+  the exact pattern Google's "scaled content abuse" / "helpful content" updates
+  penalize and deindex. Pumping dozens of mediocre articles/day risks a site
+  that costs money to run and earns nothing because it can't get traffic. The
+  site's differentiator is the owner's *thesis and voice* (see Writing voice) —
+  generation amplifies that, it does not mass-produce generic filler.
+- **Affiliate before ads.** Affiliate is the faster, lower-traffic-threshold
+  revenue path and rewards *relevant* content (a great "best X for Y" review
+  that meets buying intent earns more than 100 think-pieces). Display ad networks
+  worth having (Mediavine/Raptive) need ~10k–50k+ sessions/month — that's a
+  later, high-traffic play. So: affiliate now (Phase 3, pulled early), ads much
+  later once traffic justifies it.
+- **Targeting.** Point generation at commercial-intent topics where affiliate
+  fits naturally — TechVault (gadgets/hardware) and FinanceHub (money tools:
+  Wise, Remitly, the nestmargin funnel). Fewer, better, monetizable articles
+  beat spray-and-pray volume.
+- **Implication for the engine:** tune the pull-authoring engine for
+  *quality and targeting*, not throughput. Same pipeline; high quality bar.
+
+---
+
+## Authoring cockpit (north-star for the authoring UX)
+
+The end-state authoring experience: a single authenticated admin cockpit,
+reachable remotely, where the owner goes idea → researched draft → review/refine
+→ publish-to-hub-with-SEO-tags, in one place. ("Commit to a hub" = create a
+published `Article` row with hub + tags + meta — a database write, NOT a git
+commit; no deploy needed to publish.)
+
+**Build order to reach it (de-risked):** prove the generation engine as an MCP
+from Claude Code first (Phase 4) → once it writes well in the owner's voice,
+build the web cockpit as a front-end over the proven engine. Do NOT build the
+fancy cockpit around an unproven engine.
+
+**Security requirement (non-negotiable for the cockpit):** a publicly-reachable
+admin that can trigger web research and publish to a live site is a serious
+surface. Before/with the cockpit: strong auth, a second factor (2FA), rate
+limiting, and lockout. Governed by ENGINEERING-STANDARDS.md. Long-running
+generation needs background jobs + status polling, not a blocking request.
+
+---
+
+## Enterprise-grade north-star (with trigger conditions)
+
+The long-term vision is an enterprise-grade, cloud-hosted content platform:
+self-hosted MCP servers (AWS or similar), agent orchestration, hosted generation
+at scale. This is a real destination — but it is **gated by demand, not built
+ahead of it.**
+
+- **Build it lean until triggered.** Current lean stack (Vercel + Neon +
+  MCP-from-Claude-Code) is the right call until there's content that works and
+  an audience that's growing. Standing up AWS infrastructure before there's a
+  single reader is building the factory before proving the product.
+- **Trigger conditions to scale up** (any of): generation volume genuinely
+  outgrows the simple approach; scheduled/remote-triggered generation becomes a
+  routine need; audience traffic scales enough to justify the cost; the engine
+  is proven and the bottleneck is now infrastructure, not quality.
+- **Migrate, don't rewrite.** Write the engine host-agnostic now so MCP servers
+  lift from Claude Code → hosted (AWS/Render/Fly) cleanly. DB: Neon → paid/RDS
+  via the portable `@prisma/adapter-pg` design. Note "enterprise-grade" does NOT
+  require AWS — Vercel + Neon + hosted MCPs is a legitimate production
+  architecture; only move when there's a concrete reason.
 
 ---
 
