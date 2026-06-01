@@ -8,6 +8,7 @@ import { ArticleBody } from "./ArticleBody";
 import { hubToRoute } from "@/lib/hub-utils";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { buildAffiliateUrl } from "@/lib/affiliate";
 
 export interface EditingArticle {
   id: string;
@@ -69,6 +70,30 @@ export function ArticleEditor({ hub, article }: ArticleEditorProps) {
   // ── UI state ────────────────────────────────────────────────────────────
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
+
+  // ── Affiliate link helper ────────────────────────────────────────────────
+  const [showAffiliateHelper, setShowAffiliateHelper] = useState(false);
+  const [affiliateInput, setAffiliateInput] = useState("");
+  const [generatedLink, setGeneratedLink] = useState("");
+  const [copyLabel, setCopyLabel] = useState("Copy");
+
+  const { data: affiliatePrograms } = trpc.affiliate.listActive.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
+  const amazonProgram = affiliatePrograms?.find((p) => p.network === "amazon");
+
+  function handleGenerateLink() {
+    if (!amazonProgram || !affiliateInput.trim()) return;
+    setGeneratedLink(buildAffiliateUrl(amazonProgram, affiliateInput.trim()));
+    setCopyLabel("Copy");
+  }
+
+  async function handleCopyLink() {
+    if (!generatedLink) return;
+    await navigator.clipboard.writeText(generatedLink);
+    setCopyLabel("Copied!");
+    setTimeout(() => setCopyLabel("Copy"), 2000);
+  }
 
   // computed slug — auto-follows title unless user has edited the slug field
   const computedSlug = slug || slugify(title);
@@ -321,7 +346,7 @@ export function ArticleEditor({ hub, article }: ArticleEditorProps) {
               style={{ minHeight: "520px" }}
             >
               {body.trim() ? (
-                <ArticleBody body={body} />
+                <ArticleBody body={body} affiliatePrograms={affiliatePrograms ?? []} />
               ) : (
                 <p className="text-sm text-muted-foreground italic">
                   Preview appears as you write…
@@ -329,6 +354,99 @@ export function ArticleEditor({ hub, article }: ArticleEditorProps) {
               )}
             </div>
           </div>
+        </div>
+
+        {/* ── Affiliate link helper ────────────────────────────────────────── */}
+        <div className="rounded-md border border-border bg-card/50 p-4">
+          <button
+            type="button"
+            onClick={() => setShowAffiliateHelper((v) => !v)}
+            className="flex items-center gap-2 text-sm font-medium w-full text-left"
+          >
+            <span
+              className="inline-block w-2 h-2 rounded-full flex-shrink-0"
+              style={{ backgroundColor: "hsl(var(--affiliate))" }}
+            />
+            Affiliate link helper
+            <span className="text-xs text-muted-foreground font-normal ml-1">
+              (generates tag from DB — tag is never hardcoded here)
+            </span>
+            <span className="ml-auto text-muted-foreground text-xs">
+              {showAffiliateHelper ? "▲" : "▼"}
+            </span>
+          </button>
+
+          {showAffiliateHelper && (
+            <div className="mt-4 space-y-3">
+              {/* Inline link generator */}
+              <div>
+                <p className="text-xs font-medium mb-1.5">Generate an affiliate link</p>
+                <div className="flex gap-2 items-end">
+                  <div className="flex-1">
+                    <label className="block text-xs text-muted-foreground mb-1">
+                      Amazon ASIN (e.g. B08N5KWB9H) or full URL
+                    </label>
+                    <input
+                      value={affiliateInput}
+                      onChange={(e) => setAffiliateInput(e.target.value)}
+                      className={cn(fieldClass, "font-mono text-xs")}
+                      placeholder="B08N5KWB9H"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleGenerateLink}
+                    disabled={!amazonProgram || !affiliateInput.trim()}
+                  >
+                    Generate
+                  </Button>
+                </div>
+
+                {generatedLink && (
+                  <div className="mt-2 flex gap-2 items-center">
+                    <code className="flex-1 text-xs bg-muted rounded px-2 py-1.5 truncate">
+                      {generatedLink}
+                    </code>
+                    <button
+                      type="button"
+                      onClick={handleCopyLink}
+                      className="text-xs text-primary hover:underline whitespace-nowrap"
+                    >
+                      {copyLabel}
+                    </button>
+                  </div>
+                )}
+
+                {!amazonProgram && affiliatePrograms !== undefined && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    No active Amazon affiliate program found in the database.
+                  </p>
+                )}
+              </div>
+
+              {/* ProductCard snippet guide */}
+              <div className="border-t border-border pt-3">
+                <p className="text-xs font-medium mb-1.5">Drop a ProductCard into the body</p>
+                <pre className="text-xs bg-muted rounded p-3 overflow-x-auto leading-relaxed whitespace-pre">{`\`\`\`product-card
+asin: B08N5KWB9H
+title: Sony WH-1000XM5
+blurb: Best noise cancellation on the market.
+price: $349
+\`\`\``}</pre>
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  The affiliate tag is looked up from the database at render time — never stored in the body.
+                </p>
+              </div>
+
+              {/* NestMarginCTA snippet guide */}
+              <div className="border-t border-border pt-3">
+                <p className="text-xs font-medium mb-1.5">Drop the nestmargin CTA into the body</p>
+                <pre className="text-xs bg-muted rounded p-3 overflow-x-auto leading-relaxed whitespace-pre">{`\`\`\`nestmargin-cta
+\`\`\``}</pre>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ── Validation errors ────────────────────────────────────────────── */}

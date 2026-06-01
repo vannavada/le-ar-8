@@ -5,8 +5,10 @@ import { useSession } from "next-auth/react";
 import type { Hub } from "@content-platform/database";
 import { trpc } from "@/trpc";
 import { hubToRoute, hubColor, hubName } from "@/lib/hub-utils";
+import { hasAffiliateContent } from "@/lib/affiliate";
 import { ArticleBody } from "./ArticleBody";
 import { ShareButtons } from "./ShareButtons";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 interface ArticleDetailProps {
   hub: Hub;
@@ -26,7 +28,20 @@ export function ArticleDetail({ hub, slug }: ArticleDetailProps) {
   const accentColor = hubColor(hub);
   const route = hubToRoute(hub);
 
-  if (isLoading) {
+  // Always fetch programs unconditionally so this query batches with getBySlug
+  // in the same httpBatchLink request. If we gate it on bodyHasProductCards,
+  // the programs query only fires after getBySlug resolves — a second round-trip.
+  // During that gap the article renders with an empty programs list and ProductCard
+  // falls back to the search URL, meaning logged-out readers (everyone) never see
+  // the tagged affiliate link. Fetching eagerly costs nothing: the payload is tiny
+  // and the batch means zero extra latency versus the conditional approach.
+  const { data: affiliatePrograms, isLoading: programsLoading } =
+    trpc.affiliate.listActive.useQuery(undefined, { refetchOnWindowFocus: false });
+
+  // Derive these only once both queries have data.
+  const bodyHasAffiliate = data?.body ? hasAffiliateContent(data.body) : false;
+
+  if (isLoading || programsLoading) {
     return (
       <div className="max-w-3xl mx-auto animate-pulse space-y-4 pt-4">
         <div className="h-3 w-20 bg-muted rounded" />
@@ -113,8 +128,15 @@ export function ArticleDetail({ hub, slug }: ArticleDetailProps) {
         </p>
       )}
 
-      <div className="mt-8">
-        <ArticleBody body={data.body} />
+      {/* FTC disclosure — auto-shown when article contains affiliate content */}
+      {bodyHasAffiliate && (
+        <div className="mt-6">
+          <AffiliateDisclosure />
+        </div>
+      )}
+
+      <div className={bodyHasAffiliate ? "mt-2" : "mt-8"}>
+        <ArticleBody body={data.body} affiliatePrograms={affiliatePrograms ?? []} />
       </div>
 
       <ShareButtons title={data.title} hubRoute={route} slug={slug} />

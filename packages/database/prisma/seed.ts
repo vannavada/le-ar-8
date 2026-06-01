@@ -4,9 +4,13 @@ import { resolve } from "path";
 // Load root .env when running from monorepo
 config({ path: resolve(__dirname, "../../../.env") });
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../src/generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
-const prisma = new PrismaClient();
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   // Create a demo user if none exist
@@ -20,6 +24,23 @@ async function main() {
       },
     });
     console.log("Created demo admin user (admin@example.com)");
+  }
+
+  // Seed Amazon Associates if no affiliate programs exist
+  const programCount = await prisma.affiliateProgram.count();
+  if (programCount === 0) {
+    await prisma.affiliateProgram.create({
+      data: {
+        name: "Amazon Associates",
+        network: "amazon",
+        affiliateId: "lear8-20",
+        baseUrl: "https://www.amazon.com",
+        commission: "1–10%",
+        categories: ["tech", "lifestyle", "books", "home"],
+        active: true,
+      },
+    });
+    console.log("Seeded Amazon Associates affiliate program (tag: lear8-20)");
   }
 }
 
