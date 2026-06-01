@@ -31,22 +31,16 @@ export function ArticleBody({ body, affiliatePrograms = [] }: ArticleBodyProps) 
   const amazonProgram = affiliatePrograms.find((p) => p.network === "amazon");
 
   const components: Components = {
-    // Remove the <pre> wrapper for custom fence types — the prose pre styles
-    // (overflow-x: auto, code background) create a scroll container that captures
-    // pointer events and clips block-level components like NestMarginCTA.
-    // Regular code blocks still get <pre>; custom ones render their children directly.
+    // Always pass through pre children directly. The code component below
+    // re-adds <pre> for regular code fences, so custom fences get no wrapper.
+    // Inspecting children in `pre` to detect the language is unreliable in
+    // react-markdown v10 — children can arrive as an array containing whitespace
+    // text nodes, making React.isValidElement() return false and leaving the
+    // prose <pre> scroll-container in place (which captures pointer events).
     pre({ children }) {
-      const child = React.isValidElement(children)
-        ? (children as React.ReactElement<{ className?: string }>)
-        : null;
-      const language = child?.props?.className?.replace("language-", "") ?? "";
-      if (CUSTOM_FENCE_LANGUAGES.has(language)) {
-        return <>{children}</>;
-      }
-      return <pre>{children}</pre>;
+      return <>{children}</>;
     },
 
-    // Custom code block rendering for product-card and nestmargin-cta fences
     code({ className, children }) {
       const language = className?.replace("language-", "") ?? "";
       const content = String(children).trim();
@@ -73,12 +67,21 @@ export function ArticleBody({ body, affiliatePrograms = [] }: ArticleBodyProps) 
         );
       }
 
-      return (
-        <code className={className}>{children}</code>
-      );
+      // Block code fence (has a language- class): add back the <pre> wrapper
+      // that we stripped from the `pre` override above.
+      if (className) {
+        return (
+          <pre>
+            <code className={className}>{children}</code>
+          </pre>
+        );
+      }
+
+      // Inline code — no wrapper needed.
+      return <code>{children}</code>;
     },
 
-    // Style affiliate links in magenta; leave all other links as-is
+    // Style affiliate links in magenta; leave all other links as-is.
     a({ href, children, ...props }) {
       const isAffiliate = href ? isAffiliateHref(href) : false;
       return (
