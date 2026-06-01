@@ -1,5 +1,5 @@
+import { HubList } from "@/components/articles/HubList";
+
 export default function LearnHubPage() {
-  return (
-    <p className="text-muted-foreground text-sm">Coming soon.</p>
-  );
+  return <HubList hub="LEARN_HUB" />;
 }

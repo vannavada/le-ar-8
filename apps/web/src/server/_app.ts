@@ -1,8 +1,8 @@
 import { router } from "./trpc";
-import { techVaultRouter } from "./routers/tech-vault.router";
+import { articleRouter } from "./routers/article.router";
 
 export const appRouter = router({
-  techVault: techVaultRouter,
+  article: articleRouter,
 });
 
 export type AppRouter = typeof appRouter;

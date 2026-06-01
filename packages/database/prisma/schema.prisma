@@ -24,7 +24,7 @@ model User {
 
   accounts Account[]
   sessions Session[]
-  techVaultReviews TechVaultReview[]
+  articles Article[]
 }
 
 model Account {
@@ -69,33 +69,44 @@ enum Role {
   ADMIN
 }
 
-// ----- TechVault: Product reviews & showcases -----
-model TechVaultReview {
-  id          String   @id @default(cuid())
+// ----- Content hubs (shared Article model) -----
+
+enum Hub {
+  TECH_VAULT
+  THOUGHT_FORGE
+  FINANCE_HUB
+  LEARN_HUB
+}
+
+model Article {
+  id          String    @id @default(cuid())
+  hub         Hub
   title       String
-  slug        String   @unique
-  summary     String?  @db.Text
-  body        String   @db.Text
-  rating      Int      // 1-5
-  productName String
-  category    TechVaultCategory
-  imageUrl    String?
-  published   Boolean  @default(false)
+  slug        String
+  summary     String?   @db.Text
+  body        String    @db.Text
+  tags        String[]  @default([])
+  published   Boolean   @default(false)
   publishedAt DateTime?
   authorId    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  // Optional review fields — TechVault review-type pieces only; null otherwise
+  rating          Int?
+  productName     String?
+  productCategory String?
 
-  @@index([category])
-  @@index([published, publishedAt])
+  @@unique([hub, slug])
+  @@index([hub, published, publishedAt])
   @@index([authorId])
 }
 
-enum TechVaultCategory {
-  TECHNOLOGY
-  MENS_LIFESTYLE
-  AUTOMOTIVE
-  INNOVATION
+// ----- /now page (singleton) -----
+
+model NowPage {
+  id        String   @id @default(cuid())
+  body      String   @db.Text
+  updatedAt DateTime @updatedAt
 }

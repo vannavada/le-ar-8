@@ -1,5 +1,5 @@
+import { HubList } from "@/components/articles/HubList";
+
 export default function ThoughtForgePage() {
-  return (
-    <p className="text-muted-foreground text-sm">Articles coming soon.</p>
-  );
+  return <HubList hub="THOUGHT_FORGE" />;
 }
