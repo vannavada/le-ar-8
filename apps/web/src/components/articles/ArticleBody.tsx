@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
@@ -24,10 +25,27 @@ function isAffiliateHref(href: string): boolean {
   }
 }
 
+const CUSTOM_FENCE_LANGUAGES = new Set(["product-card", "nestmargin-cta"]);
+
 export function ArticleBody({ body, affiliatePrograms = [] }: ArticleBodyProps) {
   const amazonProgram = affiliatePrograms.find((p) => p.network === "amazon");
 
   const components: Components = {
+    // Remove the <pre> wrapper for custom fence types — the prose pre styles
+    // (overflow-x: auto, code background) create a scroll container that captures
+    // pointer events and clips block-level components like NestMarginCTA.
+    // Regular code blocks still get <pre>; custom ones render their children directly.
+    pre({ children }) {
+      const child = React.isValidElement(children)
+        ? (children as React.ReactElement<{ className?: string }>)
+        : null;
+      const language = child?.props?.className?.replace("language-", "") ?? "";
+      if (CUSTOM_FENCE_LANGUAGES.has(language)) {
+        return <>{children}</>;
+      }
+      return <pre>{children}</pre>;
+    },
+
     // Custom code block rendering for product-card and nestmargin-cta fences
     code({ className, children }) {
       const language = className?.replace("language-", "") ?? "";
