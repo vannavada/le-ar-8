@@ -60,6 +60,12 @@ auth/security as "done" without it.
 - Don't delete production data without explicit confirmation.
 - Migrations and backups before destructive schema changes; always keep a
   restore path.
+- **Schema migrations and the code that depends on them deploy together.**
+  Never apply a migration to the production database before deploying the
+  matching application code. The still-running old code will query a schema
+  that no longer matches and break immediately (dropped tables, renamed
+  columns, missing enums). The safe pattern: migration and code land in the
+  same merge-to-main / deploy, so live schema and deployed code always agree.
 - Collect the minimum data needed — nothing more.
 
 ## Conditional — financial / PII data
