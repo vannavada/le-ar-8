@@ -28,18 +28,20 @@ export function ArticleDetail({ hub, slug }: ArticleDetailProps) {
   const accentColor = hubColor(hub);
   const route = hubToRoute(hub);
 
-  // Detect affiliate content to auto-show disclosure and to decide whether to fetch programs.
+  // Always fetch programs unconditionally so this query batches with getBySlug
+  // in the same httpBatchLink request. If we gate it on bodyHasProductCards,
+  // the programs query only fires after getBySlug resolves — a second round-trip.
+  // During that gap the article renders with an empty programs list and ProductCard
+  // falls back to the search URL, meaning logged-out readers (everyone) never see
+  // the tagged affiliate link. Fetching eagerly costs nothing: the payload is tiny
+  // and the batch means zero extra latency versus the conditional approach.
+  const { data: affiliatePrograms, isLoading: programsLoading } =
+    trpc.affiliate.listActive.useQuery(undefined, { refetchOnWindowFocus: false });
+
+  // Derive these only once both queries have data.
   const bodyHasAffiliate = data?.body ? hasAffiliateContent(data.body) : false;
-  const bodyHasProductCards = data?.body ? /```product-card/.test(data.body) : false;
 
-  // Only fetch affiliate programs when the article actually contains product cards
-  // (the tag comes from the DB at render time, never hardcoded in components).
-  const { data: affiliatePrograms } = trpc.affiliate.listActive.useQuery(undefined, {
-    enabled: bodyHasProductCards,
-    refetchOnWindowFocus: false,
-  });
-
-  if (isLoading) {
+  if (isLoading || programsLoading) {
     return (
       <div className="max-w-3xl mx-auto animate-pulse space-y-4 pt-4">
         <div className="h-3 w-20 bg-muted rounded" />
