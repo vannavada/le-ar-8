@@ -110,3 +110,18 @@ model NowPage {
   body      String   @db.Text
   updatedAt DateTime @updatedAt
 }
+
+// ----- Affiliate programs -----
+
+model AffiliateProgram {
+  id          String   @id @default(cuid())
+  name        String   // e.g. "Amazon Associates"
+  network     String   // e.g. "amazon"
+  affiliateId String   // e.g. "lear8-20" — the tracking tag/ID for this program
+  baseUrl     String   // e.g. "https://www.amazon.com"
+  commission  String?  // e.g. "3–10%"
+  categories  String[] @default([])
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

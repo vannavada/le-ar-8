@@ -11,7 +11,8 @@ If a request conflicts with a locked decision below, push back and cite it.
 le-ar-8 is a personal content hub deployed at **lear8.com**. The owner writes;
 readers read. It is **uni-directional** — no reader accounts, no comments, no
 reactions, no community/social features. Revenue comes from affiliate links
-embedded seamlessly into content.
+embedded seamlessly into content, plus a small print-on-demand merch shop
+(`/shop`) — see Monetization.
 
 **Single-author, not multi-author.** le-ar-8 is the owner's personal hub — one
 voice, one byline, one thesis (see Brand name & meaning, Writing voice). It is
@@ -39,7 +40,8 @@ strength (original expert input is exactly what generic AI content lacks).
 - ❌ Not a multi-author publication. Single voice, owner's byline. (Friends can be
   sources the owner synthesizes from, never bylined authors — see above.)
 - ❌ Not a finance app. It does not track anyone's money. (That's nestmargin.com.)
-- ❌ Not paid/subscription on this site. Monetization is affiliate links only.
+- ❌ Not paid/subscription on this site. Monetization is affiliate links + a
+  print-on-demand merch shop (`/shop`) — NOT subscriptions or gated content.
 - ❌ Not a mobile app. Responsive web only.
 
 

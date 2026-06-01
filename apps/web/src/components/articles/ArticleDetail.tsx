@@ -5,8 +5,10 @@ import { useSession } from "next-auth/react";
 import type { Hub } from "@content-platform/database";
 import { trpc } from "@/trpc";
 import { hubToRoute, hubColor, hubName } from "@/lib/hub-utils";
+import { hasAffiliateContent } from "@/lib/affiliate";
 import { ArticleBody } from "./ArticleBody";
 import { ShareButtons } from "./ShareButtons";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 interface ArticleDetailProps {
   hub: Hub;
@@ -25,6 +27,17 @@ export function ArticleDetail({ hub, slug }: ArticleDetailProps) {
 
   const accentColor = hubColor(hub);
   const route = hubToRoute(hub);
+
+  // Detect affiliate content to auto-show disclosure and to decide whether to fetch programs.
+  const bodyHasAffiliate = data?.body ? hasAffiliateContent(data.body) : false;
+  const bodyHasProductCards = data?.body ? /```product-card/.test(data.body) : false;
+
+  // Only fetch affiliate programs when the article actually contains product cards
+  // (the tag comes from the DB at render time, never hardcoded in components).
+  const { data: affiliatePrograms } = trpc.affiliate.listActive.useQuery(undefined, {
+    enabled: bodyHasProductCards,
+    refetchOnWindowFocus: false,
+  });
 
   if (isLoading) {
     return (
@@ -113,8 +126,15 @@ export function ArticleDetail({ hub, slug }: ArticleDetailProps) {
         </p>
       )}
 
-      <div className="mt-8">
-        <ArticleBody body={data.body} />
+      {/* FTC disclosure — auto-shown when article contains affiliate content */}
+      {bodyHasAffiliate && (
+        <div className="mt-6">
+          <AffiliateDisclosure />
+        </div>
+      )}
+
+      <div className={bodyHasAffiliate ? "mt-2" : "mt-8"}>
+        <ArticleBody body={data.body} affiliatePrograms={affiliatePrograms ?? []} />
       </div>
 
       <ShareButtons title={data.title} hubRoute={route} slug={slug} />
