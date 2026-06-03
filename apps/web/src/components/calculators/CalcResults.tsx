@@ -10,9 +10,9 @@ interface Row {
 }
 
 interface CalcResultsProps {
-  headline: { label: string; value: string };
+  headline?: { label: string; value: string }; // optional when `empty` is set
   rows?: Row[];
-  empty?: string; // message when no result yet (e.g. waiting for input)
+  empty?: string; // message when no result yet — suppresses headline requirement
 }
 
 export function CalcResults({ headline, rows, empty }: CalcResultsProps) {
@@ -27,14 +27,16 @@ export function CalcResults({ headline, rows, empty }: CalcResultsProps) {
   return (
     <div className="rounded-xl border border-border/50 bg-card shadow-sm overflow-hidden">
       {/* Headline */}
-      <div className="px-5 py-5 border-b border-border/40" style={{ backgroundColor: `${ACCENT}0d` }}>
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">
-          {headline.label}
-        </p>
-        <p className="text-3xl font-serif font-normal" style={{ color: ACCENT }}>
-          {headline.value}
-        </p>
-      </div>
+      {headline && (
+        <div className="px-5 py-5 border-b border-border/40" style={{ backgroundColor: `${ACCENT}0d` }}>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">
+            {headline.label}
+          </p>
+          <p className="text-3xl font-serif font-normal" style={{ color: ACCENT }}>
+            {headline.value}
+          </p>
+        </div>
+      )}
 
       {/* Breakdown rows */}
       {rows && rows.length > 0 && (
