@@ -64,6 +64,15 @@ const CALCULATORS = [
 export default function CalculatorsIndexPage() {
   return (
     <div className="max-w-4xl mx-auto">
+      {/* Breadcrumb */}
+      <nav className="text-xs text-muted-foreground mb-4">
+        <Link href="/finance-hub" className="hover:underline">
+          FinanceHub
+        </Link>
+        <span className="mx-1.5 opacity-50">›</span>
+        <span>Calculators</span>
+      </nav>
+
       <div className="mb-8">
         <h2 className="text-2xl font-serif font-normal" style={{ color: ACCENT }}>
           Financial Calculators
