@@ -4,18 +4,45 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Financial Calculators | FinanceHub",
   description:
-    "Free financial calculators for FIRE, salary negotiation, real returns, lifestyle inflation, and more. Pure math, no ads, no sign-up.",
+    "Free financial calculators for FIRE, cross-border investing, salary negotiation, real returns, lifestyle inflation, and more. Pure math, no ads, no sign-up.",
 };
 
 const ACCENT = "#5f9e7e";
 
 const CALCULATORS = [
+  // ── Cross-border (live FX) ──────────────────────────────────────────────
+  {
+    slug: "money-location",
+    title: "US vs. India — Where Should My Money Live?",
+    description:
+      "Compare your savings in a US investment vs. Indian FD, after FX, INR trend, and tax. Live exchange rate.",
+    tag: "Cross-border",
+    fx: true,
+  },
+  {
+    slug: "crossborder-property",
+    title: "Buy Property in India vs. Invest in the US",
+    description:
+      "Appreciation + rental income vs. US market returns — accounting for repatriation friction and current exchange rates.",
+    tag: "Cross-border",
+    fx: true,
+  },
+  {
+    slug: "moving-back",
+    title: "Cost of Moving Back to India",
+    description:
+      "What is your US salary or savings worth in India? Current exchange rate + cost-of-living adjustment = real purchasing power.",
+    tag: "Cross-border",
+    fx: true,
+  },
+  // ── Pure math ──────────────────────────────────────────────────────────
   {
     slug: "lifestyle-inflation",
     title: "Lifestyle Inflation",
     description:
       "See how much of your raise quietly disappears into a higher lifestyle — and what it costs compounded over time.",
     tag: "Raises & spending",
+    fx: false,
   },
   {
     slug: "subscription-cost",
@@ -23,6 +50,7 @@ const CALCULATORS = [
     description:
       "$15/month feels small. Compounded over decades against what you could have earned, it isn't.",
     tag: "Subscriptions",
+    fx: false,
   },
   {
     slug: "opportunity-cost",
@@ -30,6 +58,7 @@ const CALCULATORS = [
     description:
       "What does a one-time purchase cost in future money? Every dollar spent is a dollar that can't compound.",
     tag: "Purchases",
+    fx: false,
   },
   {
     slug: "coast-fire",
@@ -37,6 +66,7 @@ const CALCULATORS = [
     description:
       "Have you already saved enough to stop contributing? Find your coast number — the point where compounding does the rest.",
     tag: "FIRE",
+    fx: false,
   },
   {
     slug: "salary-negotiation",
@@ -44,6 +74,7 @@ const CALCULATORS = [
     description:
       "A raise compounds across your entire career via higher future raises. That negotiation conversation is worth far more than the first-year number.",
     tag: "Career",
+    fx: false,
   },
   {
     slug: "time-to-fi",
@@ -51,6 +82,7 @@ const CALCULATORS = [
     description:
       "Real FIRE math: how long until your portfolio sustains your lifestyle indefinitely? Savings rate is the lever.",
     tag: "FIRE",
+    fx: false,
   },
   {
     slug: "real-return",
@@ -58,6 +90,7 @@ const CALCULATORS = [
     description:
       "Your brokerage says 10%. After tax, after inflation — what did you actually earn in purchasing power?",
     tag: "Returns",
+    fx: false,
   },
 ] as const;
 
@@ -78,8 +111,8 @@ export default function CalculatorsIndexPage() {
           Financial Calculators
         </h2>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          Pure-math tools for thinking clearly about money. No ads, no email required, no database.
-          Every calculation runs locally in your browser.
+          Pure-math tools for thinking clearly about money. Cross-border calculators use live ECB exchange rates.
+          No ads, no email, no database — every calculation runs in your browser.
         </p>
       </div>
 
@@ -94,15 +127,19 @@ export default function CalculatorsIndexPage() {
                 <h3 className="font-semibold text-sm leading-snug group-hover:text-[#5f9e7e] transition-colors">
                   {calc.title}
                 </h3>
-                <span
-                  className="text-xs px-2 py-0.5 rounded-full flex-shrink-0 mt-0.5"
-                  style={{
-                    backgroundColor: `${ACCENT}18`,
-                    color: ACCENT,
-                  }}
-                >
-                  {calc.tag}
-                </span>
+                <div className="flex flex-col items-end gap-1 flex-shrink-0 mt-0.5">
+                  <span
+                    className="text-xs px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: `${ACCENT}18`, color: ACCENT }}
+                  >
+                    {calc.tag}
+                  </span>
+                  {calc.fx && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400">
+                      Live FX
+                    </span>
+                  )}
+                </div>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed flex-1">
                 {calc.description}

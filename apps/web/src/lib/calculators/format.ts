@@ -28,3 +28,27 @@ export function fmtNumber(n: number): string {
   if (!isFinite(n)) return "—";
   return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(n);
 }
+
+// INR formatters for cross-border calculators.
+
+export function fmtINR(n: number, decimals = 0): string {
+  if (!isFinite(n)) return "—";
+  return (
+    "₹" +
+    new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: decimals,
+      minimumFractionDigits: decimals,
+    }).format(n)
+  );
+}
+
+// Compact INR: shows lakhs (L) or crores (Cr) for large amounts.
+// ₹25,00,000 → "₹25.00 L"   ₹1,50,00,000 → "₹1.50 Cr"
+export function fmtINRCompact(n: number): string {
+  if (!isFinite(n)) return "—";
+  const abs = Math.abs(n);
+  const sign = n < 0 ? "−" : "";
+  if (abs >= 10_000_000) return sign + "₹" + (abs / 10_000_000).toFixed(2) + " Cr";
+  if (abs >= 100_000)    return sign + "₹" + (abs / 100_000).toFixed(2) + " L";
+  return fmtINR(n);
+}
