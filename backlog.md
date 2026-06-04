@@ -111,3 +111,43 @@ to pick it up later.
   direction AND reconcile it with the site aesthetic together, deliberately.
 - **Trigger to revisit:** Before public launch / when committing to a final
   brand identity. Decide logo concept + reconcile with site design as one step.
+
+## Housekeeping / cleanup
+
+### Delete the test TechVault review
+- **What:** During CRUD verification today, a test review was created in
+  TechVault (against the live Neon DB) to confirm the create→list→detail path
+  works. It's real data in production Neon — delete it before launch so it
+  doesn't show up as real content.
+- **How:** There is no delete UI yet (deferred to Phase 2's authoring
+  interface). For now, delete it directly — via Prisma Studio
+  (`npm run db:studio`) or the Neon SQL editor. When the Phase 2 admin authoring
+  UI is built, a proper delete button covers this going forward.
+- **Trigger to revisit:** Now-ish (anytime before content is real), and the
+  general delete-UI need is folded into Phase 2's authoring interface.
+
+## Calculators
+
+### Cross-border net worth calculator (DEFERRED)
+- **What:** A calculator that aggregates assets/liabilities across multiple
+  currencies into a single net-worth figure — explicitly the nestmargin funnel
+  (cross-border NRI finance is nestmargin's domain). Listed among the FinanceHub
+  calculators but deferred out of the first calculator build.
+- **Why deferred:** It's the hardest calculator in the set — multi-currency,
+  needs LIVE exchange-rate data (an FX API + caching + failure handling), and
+  likely overlaps the planned rates-MCP / interest-rates infrastructure. Building
+  it alongside the pure-math calculators would let its external-data complexity
+  bleed into and slow down the simple ones. Build the self-contained calculators
+  first (simple/compound interest, APY/APR, home loan IN + mortgage US, ROI,
+  cost basis, cumulative returns — all pure client-side math, no external data),
+  then tackle the FX-dependent ones (currency converter, cross-border net worth)
+  as a focused second pass with a proper exchange-rate source.
+- **Dependency:** a chosen, reliable exchange-rate data provider (research the
+  current best free/reliable FX API at build time — rates/providers change).
+  Pairs naturally with the currency-exchange calculator (same FX-rate need) and
+  the rates-MCP phase.
+- **Funnel note:** when built, this is a prime nestmargin cross-promo surface
+  (NestMarginCTA placement).
+- **Trigger to revisit:** After the pure-math calculator suite ships and the FX
+  data source is settled (build it with the currency converter, which has the
+  same FX dependency).
