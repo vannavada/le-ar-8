@@ -23,16 +23,18 @@
 
 // ── NRI Repatriation (FEMA / Income Tax Act) ──────────────────────────────────
 
-/** Annual repatriation limit from NRO accounts per financial year.
+/** Annual repatriation limit from NRO accounts per Indian financial year (April–March).
+ *  Applies to NRO accounts ONLY. NRE and FCNR accounts are freely repatriable — no cap.
  *  SOURCE: RBI FEMA.13(R)/2016-RB, Schedule III, Para 1(ii).
  *  AS OF: 2024. CHECK: rbi.org.in → FEMA → Master Directions → FEMA 13(R). */
 export const NRO_REPATRIATION_LIMIT_USD = 1_000_000;
 
-/** TDS rate on interest income credited to NRO accounts for non-resident Indians.
+/** BASE statutory TDS rate on interest income credited to NRO accounts for NRIs.
+ *  US-resident NRIs should note: India-US DTAA Article 11 typically reduces this
+ *  to 15% on bank/savings interest — but requires a Tax Residency Certificate (TRC)
+ *  from the IRS and Form 10F filing with the Indian bank. The calculator defaults
+ *  to 30% (no treaty benefit); adjust to 15% if your CA confirms DTAA applies.
  *  SOURCE: Income Tax Act, Section 195; as of FY 2024-25.
- *  NOTE: India-US DTAA Article 11 may reduce this to 15% on "interest" — verify
- *  with a CA whether a DTAA benefit claim (Form 10F + Tax Residency Certificate)
- *  is applicable. Default assumes no treaty benefit claimed.
  *  AS OF: FY 2024-25. CHECK: incometaxindia.gov.in → TDS rates for NRIs. */
 export const NRO_INTEREST_TDS_PCT = 30;
 

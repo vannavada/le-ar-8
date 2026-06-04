@@ -48,6 +48,8 @@ const DISCLAIMER = (
       purposes only. It does NOT model: DTAA tiebreaker rules, FEIE (Form 2555),
       FBAR, FATCA, self-employment tax, state income taxes, AMT, capital gains
       carve-outs, surcharges, or the old vs. new India tax regime distinction.
+      US bracket data used here is from <strong>tax year 2024 (approximate)</strong> — verify
+      current-year brackets at IRS.gov before use.
       Any number shown here could be materially wrong for your situation.{" "}
       <strong>Do not make tax-planning or residency decisions based on this calculator.</strong>{" "}
       Consult a qualified cross-border CPA or tax attorney before filing in either country.

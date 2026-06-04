@@ -160,7 +160,7 @@ export function NriRepatriationCalculator() {
             min={0}
             max={40}
             step={0.5}
-            hint="Pre-filled from published rates (regulatory-rules.ts). Adjust if claiming DTAA benefit or if your CA advises a different rate."
+            hint="Base statutory rate (no treaty benefit applied). US-resident NRIs may qualify for 15% under India-US DTAA Art. 11 with a Tax Residency Certificate (IRS) + Form 10F — adjust to 15% if your CA confirms DTAA applies."
           />
 
           <CalcInput
@@ -176,14 +176,14 @@ export function NriRepatriationCalculator() {
           />
 
           <p className="text-xs text-muted-foreground border border-border/50 rounded-md px-3 py-2 bg-muted/30">
-            <strong>NRE vs NRO:</strong> NRE account balances are freely repatriable —
-            the USD 1M limit applies only to NRO accounts. Surcharges on large
-            amounts (above ₹50 lakh) are not modelled here and will raise the
-            effective rate further.
+            <strong>NRO accounts only:</strong> The USD 1M cap applies to NRO accounts
+            specifically — per Indian financial year (April–March), not the calendar year.
+            NRE and FCNR accounts are freely repatriable with no annual cap.
+            Surcharges on amounts above ₹50 lakh are not modelled here.
           </p>
 
           <p className="text-xs text-muted-foreground">
-            Rules applied: {RULE_AS_OF}. Annual limit: USD {NRO_REPATRIATION_LIMIT_USD.toLocaleString()}.
+            Rules applied: {RULE_AS_OF}. NRO annual limit: USD {NRO_REPATRIATION_LIMIT_USD.toLocaleString()} per Indian financial year (April–March).
           </p>
 
           <ResetButton onReset={() => {
@@ -217,7 +217,7 @@ export function NriRepatriationCalculator() {
                 { label: `Net in USD (at ₹${usdToInr?.toFixed(2)}/USD)`, value: fmtCurrency(result.netUsd), highlight: true },
                 { label: "Effective deduction rate", value: fmtPct(result.effectiveTaxRatePct, 1), muted: true },
                 {
-                  label: `% of USD ${(NRO_REPATRIATION_LIMIT_USD / 1_000_000).toFixed(0)}M annual limit used`,
+                  label: `% of NRO annual limit (USD ${(NRO_REPATRIATION_LIMIT_USD / 1_000_000).toFixed(0)}M, Apr–Mar FY) used`,
                   value: fmtPct(result.limitPctUsed, 1) + (result.exceedsLimit ? " — OVER LIMIT" : ""),
                   highlight: result.exceedsLimit,
                 },
@@ -230,7 +230,7 @@ export function NriRepatriationCalculator() {
             {/* Visual limit bar */}
             <div>
               <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                <span>USD 1M annual NRO limit</span>
+                <span>NRO limit: USD 1M/yr (Apr–Mar)</span>
                 <span>{fmtPct(result.limitPctUsed, 1)} used</span>
               </div>
               <div className="h-2 rounded-full bg-muted overflow-hidden">
@@ -245,14 +245,15 @@ export function NriRepatriationCalculator() {
             </div>
 
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Estimate based on {RULE_AS_OF} rates. Surcharges on amounts
-              above ₹50 lakh, DTAA treaty benefits, and CA12B/Form 15CB compliance
-              costs are not included. Verify with a CA before initiating repatriation.
+              Estimate based on {RULE_AS_OF} rates. Surcharges above ₹50 lakh, DTAA
+              treaty benefits, and Form 15CA/15CB compliance costs (renamed Form 146 /
+              Form 145 under Income Tax Act 2025, from April 1, 2026) are not included.
+              Verify with a CA before initiating repatriation.
             </p>
           </div>
         )
       }
-      notes={`NRO repatriation limit: USD ${NRO_REPATRIATION_LIMIT_USD.toLocaleString()} per financial year (RBI FEMA.13(R)/2016-RB). NRE balances are freely repatriable. This estimate covers base TDS + cess only — no surcharges, no DTAA adjustments, no professional fees. India-US DTAA Article 11 can reduce interest TDS to 15% if you obtain a Tax Residency Certificate and file Form 10F — consult a CA to claim this.`}
+      notes={`NRO repatriation limit: USD ${NRO_REPATRIATION_LIMIT_USD.toLocaleString()} per Indian financial year (April–March) — RBI FEMA.13(R)/2016-RB. NRE and FCNR accounts are freely repatriable with no cap. This estimate covers base TDS + cess only — no surcharges, no DTAA adjustments. India-US DTAA Article 11 can reduce NRO interest TDS from 30% to 15% with a Tax Residency Certificate (from the IRS) and Form 10F filed with the Indian bank — consult a CA to claim this. Repatriation requires Form 15CA/15CB filings (renamed Form 146/Form 145 under the Income Tax Act 2025, from April 1, 2026).`}
       ctaSlot={<NestMarginCTA />}
     />
   );
