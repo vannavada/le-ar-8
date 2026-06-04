@@ -46,8 +46,7 @@ const DEFAULTS = {
   lifetimeExemptionUsd: US_LIFETIME_GIFT_ESTATE_EXEMPTION_USD,
 };
 
-// ⚠️ Source dates
-const RULE_YEAR = "2024";
+const RULE_YEAR = "2026";
 
 const DISCLAIMER = (
   <div className="rounded-lg border-l-4 border-amber-500 bg-amber-50/40 dark:bg-amber-950/30 px-4 py-3">
@@ -57,8 +56,8 @@ const DISCLAIMER = (
     <p className="mt-1 text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
       US gift-tax thresholds are inflation-indexed and <strong>change every year</strong>.
       The lifetime exemption ({RULE_YEAR}: ${US_LIFETIME_GIFT_ESTATE_EXEMPTION_USD.toLocaleString()})
-      is scheduled to be <strong>roughly halved in 2026</strong> when the TCJA provisions expire —
-      unless Congress acts. India gift-tax rules depend on the exact relationship. These figures
+      is inflation-adjusted annually — verify the current figure at IRS.gov before use.
+      India gift-tax rules depend on the exact relationship. These figures
       are as of {RULE_YEAR} and must be verified before use. Consult a qualified
       cross-border tax professional before making large transfers.
     </p>
@@ -146,7 +145,7 @@ export function GiftRemittanceCalculator() {
             prefix="$"
             min={0}
             step={1000}
-            hint="Other amounts already given to the same recipient in 2024. Leave blank or 0 if this is the first transfer."
+            hint="Other amounts already given to the same recipient in 2026. Leave blank or 0 if this is the first transfer."
           />
 
           <CalcInput
@@ -177,13 +176,13 @@ export function GiftRemittanceCalculator() {
 
           <CalcInput
             id="lifetimeEx"
-            label={`Lifetime exemption (${RULE_YEAR}) — ⚠ TCJA sunset 2026`}
+            label={`Lifetime exemption (${RULE_YEAR})`}
             value={lifetimeExemptionUsd}
             onChange={setLifetimeEx}
             prefix="$"
             min={0}
             step={100000}
-            hint={`Currently $${US_LIFETIME_GIFT_ESTATE_EXEMPTION_USD.toLocaleString()} but scheduled to be roughly halved when TCJA expires after 2025. Check IRS.gov each year.`}
+            hint={`$${US_LIFETIME_GIFT_ESTATE_EXEMPTION_USD.toLocaleString()} for ${RULE_YEAR} — inflation-adjusted annually. Verify the current figure at IRS.gov before use.`}
           />
 
           <ResetButton onReset={() => {
@@ -258,8 +257,8 @@ export function GiftRemittanceCalculator() {
 
             <p className="text-xs text-muted-foreground leading-relaxed">
               US rules as of {RULE_YEAR}. India rules: IT Act AY 2025-26.
-              ⚠ TCJA lifetime exemption may halve after 2025. The annual exclusion
-              changes annually — check IRS Rev. Proc. before each tax year.
+              The annual exclusion and lifetime exemption are inflation-adjusted annually —
+              check IRS Rev. Proc. before each tax year.
               "Relative" under the Indian IT Act has a specific legal definition —
               confirm the exact relationship with a CA.
             </p>

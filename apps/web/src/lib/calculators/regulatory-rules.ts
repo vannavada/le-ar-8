@@ -13,7 +13,8 @@
  *
  * Key references:
  *   - IRS Publications: pub.irs.gov (updated each tax year)
- *   - IRS Rev. Proc. 2023-34: 2024 inflation-adjusted amounts
+ *   - IRS inflation adjustments for 2026: annual gift exclusion $19,000; FEIE $130,000
+ *   - One Big Beautiful Bill (signed July 4, 2025): lifetime gift/estate exemption made permanent
  *   - India Finance Act 2024 / Union Budget 2024-25 (effective AY 2025-26)
  *   - RBI FEMA Master Direction FEMA.13(R)/2016-RB (updated periodically)
  *   - India-US DTAA (1989, signed; 1990, in force; check for protocols)
@@ -80,24 +81,22 @@ export const INDIA_CESS_PCT = 4;
 
 /** Annual gift tax exclusion per recipient for US citizens/residents (non-spouse).
  *  Any gift above this amount in a calendar year reduces the lifetime exemption.
- *  SOURCE: IRS Rev. Proc. 2023-34 (for calendar year 2024).
- *  AS OF: 2024. CHECK: IRS.gov → "gift tax annual exclusion" each year — this
- *  amount is inflation-indexed and rises periodically. Was $17,000 in 2023. */
-export const US_ANNUAL_GIFT_EXCLUSION_USD = 18_000;
+ *  SOURCE: IRS inflation adjustments for tax year 2026 (unchanged from 2025; was $18,000 in 2024).
+ *  AS OF: 2026. CHECK: IRS.gov → "gift tax annual exclusion" each year — inflation-indexed. */
+export const US_ANNUAL_GIFT_EXCLUSION_USD = 19_000;
 
 /** Higher annual exclusion for gifts to a non-US-citizen spouse (Section 2523(i)).
- *  Inflation-adjusted annually by IRS.
- *  SOURCE: IRS Rev. Proc. 2023-34 (for calendar year 2024).
- *  AS OF: 2024. CHECK: IRS.gov → search "gifts to non-citizen spouse". */
-export const US_ANNUAL_GIFT_EXCLUSION_NON_CITIZEN_SPOUSE_USD = 185_000;
+ *  Inflation-adjusted annually by IRS. Particularly relevant for the NRI audience.
+ *  SOURCE: IRS inflation adjustments for tax year 2026 (was $185,000 in 2024).
+ *  AS OF: 2026. CHECK: IRS.gov → search "gifts to non-citizen spouse" each year. */
+export const US_ANNUAL_GIFT_EXCLUSION_NON_CITIZEN_SPOUSE_USD = 194_000;
 
 /** Federal lifetime gift and estate tax exemption (unified credit equivalent).
- *  ⚠️  TCJA SUNSET: This high exemption is scheduled to be roughly HALVED in 2026
- *  when the Tax Cuts and Jobs Act provisions expire (unless Congress extends them).
- *  Planning around this threshold is time-sensitive.
- *  SOURCE: IRS Rev. Proc. 2023-34 (for calendar year 2024).
- *  AS OF: 2024. CHECK: IRS.gov each year; CRITICALLY re-check after 2025 budget. */
-export const US_LIFETIME_GIFT_ESTATE_EXEMPTION_USD = 13_610_000;
+ *  The TCJA sunset/halving did NOT occur. The One Big Beautiful Bill (signed
+ *  July 4, 2025) made the higher exemption permanent and indexed it for inflation.
+ *  SOURCE: One Big Beautiful Bill (enacted July 2025); IRS inflation adjustment for 2026.
+ *  AS OF: 2026. CHECK: IRS.gov each year for the inflation-adjusted figure. */
+export const US_LIFETIME_GIFT_ESTATE_EXEMPTION_USD = 15_000_000;
 
 /** IRS Form 3520 reporting threshold — US persons who receive gifts from
  *  foreign individuals totalling more than this in a calendar year must file
@@ -115,10 +114,11 @@ export const US_FOREIGN_GIFT_REPORTING_THRESHOLD_USD = 100_000;
  *  AS OF: FY 2024-25. CHECK: incometaxindia.gov.in. */
 export const INDIA_GIFT_TAXABLE_THRESHOLD_INR = 50_000;
 
-/** Whether the TCJA lifetime exemption is scheduled to sunset (halve) after 2025.
- *  This is a planning flag, not a calculated value.
- *  SOURCE: TCJA Section 11061; IRC 2010(c)(3). */
-export const TCJA_SUNSET_WARNING = true;
+/** TCJA sunset flag — now false. The One Big Beautiful Bill (signed July 4, 2025)
+ *  made the higher lifetime exemption permanent; the scheduled halving did not occur.
+ *  Retained as a documentary constant so callers can assert the sunset is resolved.
+ *  SOURCE: One Big Beautiful Bill (enacted July 2025). */
+export const TCJA_SUNSET_WARNING = false;
 
 // ── Dual-Tax-Residency Estimator (India new tax regime + US brackets) ─────────
 
