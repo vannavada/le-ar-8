@@ -10,6 +10,8 @@ interface CalculatorShellProps {
   results: React.ReactNode;
   notes?: React.ReactNode;
   ctaSlot?: React.ReactNode;
+  /** Optional full-width alert/disclaimer banner rendered above the two-column layout. Use for Build 3 regulatory calculators. */
+  alertBanner?: React.ReactNode;
 }
 
 export function CalculatorShell({
@@ -19,6 +21,7 @@ export function CalculatorShell({
   results,
   notes,
   ctaSlot,
+  alertBanner,
 }: CalculatorShellProps) {
   return (
     <div className="max-w-4xl mx-auto">
@@ -47,6 +50,9 @@ export function CalculatorShell({
           {description}
         </p>
       </div>
+
+      {/* Full-width alert banner (Build 3 regulatory calculators) */}
+      {alertBanner && <div className="mb-6">{alertBanner}</div>}
 
       {/* Main two-column layout: inputs left, results right */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-6 lg:gap-8 items-start">
