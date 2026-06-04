@@ -10,6 +10,34 @@ export const metadata: Metadata = {
 const ACCENT = "#5f9e7e";
 
 const CALCULATORS = [
+  // ── Cross-border regulatory (tax/legal rules — verify before use) ───────
+  {
+    slug: "nri-repatriation",
+    title: "NRI Repatriation Calculator",
+    description:
+      "Estimate how much of your Indian income or asset-sale proceeds you can repatriate to the US after Indian taxes, vs. the RBI's USD 1M/year NRO limit. Estimate only — not tax advice.",
+    tag: "Regulatory",
+    fx: true,
+    regulatory: true,
+  },
+  {
+    slug: "gift-remittance",
+    title: "Gift & Remittance Limits",
+    description:
+      "US→India transfers: annual exclusion ($18K), lifetime exemption ($13.6M, halves in 2026?), and whether the Indian recipient owes income tax. Thresholds change yearly.",
+    tag: "Regulatory",
+    fx: true,
+    regulatory: true,
+  },
+  {
+    slug: "dual-tax-residency",
+    title: "Dual-Tax-Residency Estimator",
+    description:
+      "Rough ballpark: US and India tax on income in both countries, and whether the Foreign Tax Credit likely prevents double-taxation. Deliberately rough — not a tax computation.",
+    tag: "Regulatory",
+    fx: true,
+    regulatory: true,
+  },
   // ── Cross-border (live FX) ──────────────────────────────────────────────
   {
     slug: "money-location",
@@ -18,6 +46,7 @@ const CALCULATORS = [
       "Compare your savings in a US investment vs. Indian FD, after FX, INR trend, and tax. Live exchange rate.",
     tag: "Cross-border",
     fx: true,
+    regulatory: false,
   },
   {
     slug: "crossborder-property",
@@ -26,6 +55,7 @@ const CALCULATORS = [
       "Appreciation + rental income vs. US market returns — accounting for repatriation friction and current exchange rates.",
     tag: "Cross-border",
     fx: true,
+    regulatory: false,
   },
   {
     slug: "moving-back",
@@ -34,6 +64,7 @@ const CALCULATORS = [
       "What is your US salary or savings worth in India? Current exchange rate + cost-of-living adjustment = real purchasing power.",
     tag: "Cross-border",
     fx: true,
+    regulatory: false,
   },
   // ── Pure math ──────────────────────────────────────────────────────────
   {
@@ -43,6 +74,7 @@ const CALCULATORS = [
       "See how much of your raise quietly disappears into a higher lifestyle — and what it costs compounded over time.",
     tag: "Raises & spending",
     fx: false,
+    regulatory: false,
   },
   {
     slug: "subscription-cost",
@@ -51,6 +83,7 @@ const CALCULATORS = [
       "$15/month feels small. Compounded over decades against what you could have earned, it isn't.",
     tag: "Subscriptions",
     fx: false,
+    regulatory: false,
   },
   {
     slug: "opportunity-cost",
@@ -59,6 +92,7 @@ const CALCULATORS = [
       "What does a one-time purchase cost in future money? Every dollar spent is a dollar that can't compound.",
     tag: "Purchases",
     fx: false,
+    regulatory: false,
   },
   {
     slug: "coast-fire",
@@ -67,6 +101,7 @@ const CALCULATORS = [
       "Have you already saved enough to stop contributing? Find your coast number — the point where compounding does the rest.",
     tag: "FIRE",
     fx: false,
+    regulatory: false,
   },
   {
     slug: "salary-negotiation",
@@ -75,6 +110,7 @@ const CALCULATORS = [
       "A raise compounds across your entire career via higher future raises. That negotiation conversation is worth far more than the first-year number.",
     tag: "Career",
     fx: false,
+    regulatory: false,
   },
   {
     slug: "time-to-fi",
@@ -83,6 +119,7 @@ const CALCULATORS = [
       "Real FIRE math: how long until your portfolio sustains your lifestyle indefinitely? Savings rate is the lever.",
     tag: "FIRE",
     fx: false,
+    regulatory: false,
   },
   {
     slug: "real-return",
@@ -91,6 +128,7 @@ const CALCULATORS = [
       "Your brokerage says 10%. After tax, after inflation — what did you actually earn in purchasing power?",
     tag: "Returns",
     fx: false,
+    regulatory: false,
   },
 ] as const;
 
@@ -111,7 +149,8 @@ export default function CalculatorsIndexPage() {
           Financial Calculators
         </h2>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          Pure-math tools for thinking clearly about money. Cross-border calculators use live ECB exchange rates.
+          Tools for thinking clearly about money. Cross-border calculators use live ECB exchange rates.
+          Regulatory calculators (marked ⚠) encode tax/legal rules — verify before relying on them.
           No ads, no email, no database — every calculation runs in your browser.
         </p>
       </div>
@@ -134,9 +173,14 @@ export default function CalculatorsIndexPage() {
                   >
                     {calc.tag}
                   </span>
-                  {calc.fx && (
+                  {calc.fx && !calc.regulatory && (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400">
                       Live FX
+                    </span>
+                  )}
+                  {calc.regulatory && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400">
+                      ⚠ Tax rules
                     </span>
                   )}
                 </div>
