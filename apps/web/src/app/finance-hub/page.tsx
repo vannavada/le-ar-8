@@ -19,7 +19,7 @@ export default function FinanceHubPage() {
             Financial Calculators
           </p>
           <p className="mt-1 max-w-xl text-sm text-muted-foreground leading-relaxed">
-            7 pure-math tools — FIRE numbers, real returns, the lifetime value of a raise, and more. Runs entirely in your browser.
+            Free financial calculators — FIRE and real-return planning, plus cross-border US–India money tools built for NRIs. Runs entirely in your browser.
           </p>
         </div>
         <span

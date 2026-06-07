@@ -120,6 +120,11 @@ export function HomepageHero({ randomHref }: Props) {
         </span>
       </div>
 
+      {/* ── Tagline — whispers beneath the [/8] logo ──────────────────────── */}
+      <p className="relative z-10 pointer-events-none select-none text-center text-xs tracking-widest text-muted-foreground/70 mt-3">
+        the human layer of the internet
+      </p>
+
       {/* ── Content — centered below watermark ────────────────────────────── */}
       <div className="relative z-10 w-full max-w-3xl animate-fade-in flex flex-col items-center mt-6 sm:mt-8">
 

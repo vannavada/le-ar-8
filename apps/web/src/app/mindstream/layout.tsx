@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import { SectionLayout } from "@/components/layout/section-layout";
 
-export const metadata = { title: "MindStream" };
+export const metadata: Metadata = {
+  title: "MindStream",
+  description:
+    "Personal thoughts and reflections — from one-liners to expanded pieces.",
+};
 
 export default function MindStreamLayout({ children }: { children: React.ReactNode }) {
   return <SectionLayout slug="mindstream">{children}</SectionLayout>;
