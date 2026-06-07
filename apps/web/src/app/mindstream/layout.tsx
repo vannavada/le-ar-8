@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SectionLayout } from "@/components/layout/section-layout";
 
 export const metadata: Metadata = {
-  title: "MindStream",
+  title: { default: "MindStream", template: "%s — le-ar-8" },
   description:
     "Personal thoughts and reflections — from one-liners to expanded pieces.",
 };

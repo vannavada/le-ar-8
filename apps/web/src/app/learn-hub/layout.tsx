@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SectionLayout } from "@/components/layout/section-layout";
 
 export const metadata: Metadata = {
-  title: "LearnHub",
+  title: { default: "LearnHub", template: "%s — le-ar-8" },
   description:
     "Guides and resources on finance, technology, and the skills worth developing.",
 };
