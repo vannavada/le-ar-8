@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Financial Calculators | FinanceHub",
+  title: "Financial Calculators",
   description:
     "Free financial calculators — FIRE planning, real returns, and cross-border US–India money tools for NRIs. No ads, no sign-up, runs in your browser.",
 };

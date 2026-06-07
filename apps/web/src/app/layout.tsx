@@ -17,10 +17,11 @@ const instrumentSerif = Instrument_Serif({
 
 export const metadata: Metadata = {
   title: {
-    default: "lear8",
-    template: "%s | lear8",
+    default: "le-ar-8 — NRI & Cross-Border Finance Tools, Reviews & Essays",
+    template: "%s — le-ar-8",
   },
-  description: "Tech reviews, deep reads, and financial clarity.",
+  description:
+    "Cross-border finance tools, honest product reviews, and essays on money and tech. Written for humans, runs in your browser.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
