@@ -121,7 +121,7 @@ export function HomepageHero({ randomHref }: Props) {
       </div>
 
       {/* ── Tagline — whispers beneath the [/8] logo ──────────────────────── */}
-      <p className="pointer-events-none select-none text-center text-xs tracking-widest text-foreground/30 dark:text-foreground/25 mt-3">
+      <p className="relative z-10 pointer-events-none select-none text-center text-xs tracking-widest text-muted-foreground/70 mt-3">
         the human layer of the internet
       </p>
 
