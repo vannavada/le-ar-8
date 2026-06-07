@@ -44,12 +44,17 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
 
-        {/* Brand: [/8] mark + le-ar-8 wordmark */}
+        {/* Brand: [/8] mark + wordmark + corner tagline */}
         <Link href="/" className="flex items-center gap-2 group">
           <TerminalMark className="text-foreground" />
-          <span className="text-base font-bold tracking-tight text-foreground">
-            le-ar-8
-          </span>
+          <div className="flex flex-col leading-none">
+            <span className="text-base font-bold tracking-tight text-foreground leading-none">
+              le-ar-8
+            </span>
+            <span className="mt-0.5 text-[10px] tracking-[0.06em] text-muted-foreground/70 whitespace-nowrap leading-none">
+              the human layer of the internet
+            </span>
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-1">
